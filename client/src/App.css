@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* Container for main content */
+.main-content {
+  padding: 20px; /* Ensure there's padding for the content */
+  min-height: calc(100vh - 60px); /* Adjust according to the footer height */
+  box-sizing: border-box; /* Ensure padding is included in height calculation */
+}
+
+
