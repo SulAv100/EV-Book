@@ -1,14 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./NavBar.css";
 import Logo from "../../assets/logo.jpg";
+import { useAuth } from "../../hooks/authContext";
 
 import { Link } from "react-router-dom";
 
 function NavBar() {
+  const { getUserData, userData } = useAuth();
+
+  useEffect(() => {
+    getUserData();
+  }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log(data.msg);
+        window.location.reload();
+        return;
+      }
+      console.log("Try again");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -24,11 +49,17 @@ function NavBar() {
             <ul>
               <li>Offers</li>
               <li>Bookings</li>
-              <Link to="/login">
+              {userData ? (
                 <li>
-                  <button>Login/Signup</button>
+                  <button onClick={handleLogout}>Logout</button>
                 </li>
-              </Link>
+              ) : (
+                <Link to="/login">
+                  <li>
+                    <button>Login/Signup</button>
+                  </li>
+                </Link>
+              )}
             </ul>
           </nav>
           <div className="hamburger" onClick={toggleSidebar}>
@@ -43,11 +74,15 @@ function NavBar() {
             <ul>
               <li>Offers</li>
               <li>Bookings</li>
-              <Link to="/login">
-                <li>
-                  <button>Login/Signup</button>
-                </li>
-              </Link>
+              {userData ? (
+                <li>{userData}</li>
+              ) : (
+                <Link to="/login">
+                  <li>
+                    <button>Login/Signup</button>
+                  </li>
+                </Link>
+              )}
             </ul>
           </div>
         </div>

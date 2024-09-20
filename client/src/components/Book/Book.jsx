@@ -1,167 +1,90 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Book.css";
-import Vehicle from "../Vehicle/Vehicle"; // Import the new Vehicle component
+import Van from "../../assets/van.jpg";
 
 function Book() {
-  const [showVehicles, setShowVehicles] = useState(null);
-
-  const handleSearchClick = (route) => {
-    setShowVehicles(route);
-  };
-
-// Dummy vehicle data with additional information
-const vehicleData = {
-  route1: [
-    {
-      image: "https://via.placeholder.com/100",
-      vehicleNumber: "BUS123",
-      date: "2024-09-30",
-      departureTime: "10:00 AM",
-      route: "Devghat to Kathmandu",
-      fare: "$25", // Added fare information
-    },
-    {
-      image: "https://via.placeholder.com/100",
-      vehicleNumber: "CAR456",
-      date: "2024-09-30",
-      departureTime: "11:00 AM",
-      route: "Devghat to Kathmandu",
-      fare: "$35", // Added fare information
-    },
-  ],
-  route2: [
-    {
-      image: "https://via.placeholder.com/100",
-      vehicleNumber: "BUS789",
-      date: "2024-09-30",
-      departureTime: "09:00 AM",
-      route: "Kathmandu to Devghat",
-      fare: "$30", // Added fare information
-    },
-    {
-      image: "https://via.placeholder.com/100",
-      vehicleNumber: "CAR012",
-      date: "2024-09-30",
-      departureTime: "01:00 PM",
-      route: "Kathmandu to Devghat",
-      fare: "$40", // Added fare information
-    },
-  ],
-  route3: [
-    {
-      image: "https://via.placeholder.com/100",
-      vehicleNumber: "TRUCK345",
-      date: "2024-09-30",
-      departureTime: "03:00 PM",
-      route: "Kathmandu to Pokhara",
-      fare: "$60", // Added fare information
-    },
-  ],
-};
-
-
   return (
-    <div className="route-container">
-      {/* First Route: Devghat to Kathmandu */}
-      <div className="route">
-        <div className="row-options">
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-location-pin"></i>
-              <p>Starting Point</p>
+    <section className="booking-part">
+      <h1>Devghat, Town Chowk To Kathmandu, Kalanki</h1>
+      <div className="upper-section">
+        <div className="upper-sub">
+          <span>Devghat Town chowk --- Kathmandu Talanki</span>
+          <span>September 21, 2024</span>
+        </div>
+        <div className="book-section">
+          <figure>
+            <img src={Van} alt="" />
+          </figure>
+          <div className="location">
+            <span>
+              <p>Devghat to</p>
+              <p>Kathmandu</p>
             </span>
-            <input
-              type="text"
-              value="Devghat"
-              readOnly
-              className="readonly-input"
-            />
+            <span>
+              <p>BA 1 Kha 9606</p>
+            </span>
           </div>
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-location-dot"></i>
-              <p>Destination</p>
-            </span>
-            <input
-              type="text"
-              value="Kathmandu"
-              readOnly
-              className="readonly-input"
-            />
-          </div>
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-calendar"></i>
-              <p>Travel Date</p>
-            </span>
-            <div className="date-search-wrapper">
-              <input type="date" className="date-input" />
-              <button className="search-button" onClick={() => handleSearchClick('route1')}>
-                <i className="fa-solid fa-search"></i>
-              </button>
+          <div className="time">
+            <div>
+              <i class="fa-solid fa-location-pin"></i>
+              <p>Devghat Town Chowk (5:00 am)</p>
+            </div>
+            <div>
+              <i class="fa-solid fa-location-dot"></i>{" "}
+              <p>Kathmandu Kalanki (12:00 pm)</p>
             </div>
           </div>
+          <div className="type">
+            <span>Devghat Micro</span>
+            <span>Coach Type</span>
+          </div>
+          <div className="price">
+            <p>Rs.600</p>
+            <p>Fare/Seat</p>
+          </div>
+          <button className="seat-btn">View Seat</button>
         </div>
-        {/* Vehicle Information for Devghat to Kathmandu */}
-        {showVehicles === 'route1' && (
-          <div className="vehicle-list">
-            {vehicleData.route1.map((vehicle, index) => (
-              <Vehicle key={index} {...vehicle} />
-            ))}
-          </div>
-        )}
       </div>
-
-      {/* Second Route: Kathmandu to Devghat */}
-      <div className="route">
-        <div className="row-options">
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-location-pin"></i>
-              <p>Starting Point</p>
+      <div className="lower-section">
+        <div className="upper-sub">
+          <span>Kathmandu Kalanki --- Devghat Town Hall</span>
+          <span>September 21, 2024</span>
+        </div>
+        <div className="book-section">
+          <figure>
+            <img src={Van} alt="" />
+          </figure>
+          <div className="location">
+            <span>
+              <p>Devghat to</p>
+              <p>Kathmandu</p>
             </span>
-            <input
-              type="text"
-              value="Kathmandu"
-              readOnly
-              className="readonly-input"
-            />
+            <span>
+              <p>BA 1 Kha 9606</p>
+            </span>
           </div>
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-location-dot"></i>
-              <p>Destination</p>
-            </span>
-            <input
-              type="text"
-              value="Devghat"
-              readOnly
-              className="readonly-input"
-            />
-          </div>
-          <div className="single-option">
-            <span className="single-location">
-              <i className="fa-solid fa-calendar"></i>
-              <p>Travel Date</p>
-            </span>
-            <div className="date-search-wrapper">
-              <input type="date" className="date-input" />
-              <button className="search-button" onClick={() => handleSearchClick('route2')}>
-                <i className="fa-solid fa-search"></i>
-              </button>
+          <div className="time">
+            <div>
+              <i class="fa-solid fa-location-pin"></i>
+              <p>Kathmandu Kalanki (5:00 am)</p>
+            </div>
+            <div>
+              <i class="fa-solid fa-location-dot"></i>
+              <p>Devghat Town Chowk (12:00 pm)</p>
             </div>
           </div>
-        </div>
-        {/* Vehicle Information for Kathmandu to Devghat */}
-        {showVehicles === 'route2' && (
-          <div className="vehicle-list">
-            {vehicleData.route2.map((vehicle, index) => (
-              <Vehicle key={index} {...vehicle} />
-            ))}
+          <div className="type">
+            <span>Devghat Micro</span>
+            <span>Coach Type</span>
           </div>
-        )}
+          <div className="price">
+            <p>Rs.600</p>
+            <p>Fare/Seat</p>
+          </div>
+          <button className="seat-btn">View Seat</button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 

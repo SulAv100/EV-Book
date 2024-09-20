@@ -23,13 +23,10 @@
     height: 100%;
     object-fit: cover;
     border-radius: 20px;
-    filter: brightness(0.5);
     transition: filter 0.3s ease;
   }
   
-  .background-image:hover img {
-    filter: brightness(0.6);
-  }
+  
   
   .overlay {
     position: absolute;

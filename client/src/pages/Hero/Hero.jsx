@@ -1,9 +1,18 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import "./Hero.css";
 import Book from "../../components/Book/Book";
 import bImage from "../../assets/background.jpeg";
+import { useAuth } from "../../hooks/authContext";
 
 function Hero() {
+
+  const {getUserData} = useAuth();
+
+
+  useEffect(()=>{
+    getUserData();
+  },[])
+
   return (
     <>
       <div className="background-image">
