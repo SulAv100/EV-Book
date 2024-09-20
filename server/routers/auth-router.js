@@ -7,5 +7,6 @@ router.route("/register").post(authController.register);
 router.route("/login").post(authController.login);
 router.route('/getUser').get(authMiddleware,authController.getProfile);
 router.route('/logout').post(authController.logout);
+router.route('/adminLogin').post(authController.adminLogin);
 
 module.exports = router;

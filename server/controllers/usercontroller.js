@@ -1,5 +1,6 @@
 const userModel = require("../models/user-model.js");
 const bcrypt = require("bcryptjs");
+const adminModel = require("../models/admin-model.js");
 
 const register = async (req, res) => {
   try {
@@ -78,15 +79,48 @@ const getProfile = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    return res.cookie("token", "", {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV == "production",
-      expires: new Date(0),
-    }).json({msg:"Logged Out"});
+    return res
+      .cookie("token", "", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV == "production",
+        expires: new Date(0),
+      })
+      .json({ msg: "Logged Out" });
   } catch (error) {
     return res.status(500).json({ msg: "Server error occured" });
   }
 };
 
-module.exports = { register, login, getProfile, logout };
+const adminLogin = async (req, res) => {
+  try {
+    const { phoneNumber, password } = req.body;
+
+    const verifyNumber = await adminModel.findOne({ phoneNumber });
+
+    if (!verifyNumber) {
+      return res.status(402).json({ msg: "Invalid data" });
+    }
+
+    const comparePassword = await bcrypt.compare(
+      password,
+      verifyNumber.password
+    );
+
+    if (comparePassword) {
+      const adminToken = await verifyNumber.generateAdminToken();
+      res
+        .cookie("adminToken", adminToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          secure: process.env.NODE_ENV == "production",
+          expires: new Date(Date.now() + 30 * 40 * 60 * 60 * 1000),
+        })
+        .json({ msg: "Successfully Logged in" });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = { register, login, getProfile, logout, adminLogin };

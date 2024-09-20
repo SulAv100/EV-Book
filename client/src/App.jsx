@@ -5,6 +5,8 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Hero from "./pages/Hero/Hero";
 import Footer from "./components/Footer/Footer";
+import AdminLogin from "./components/AdminLogin/AdminLogin";
+
 function App() {
   return (
     <>
@@ -14,6 +16,7 @@ function App() {
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/adminLogin" element={<AdminLogin />} />
         </Routes>
       </div>
       <Footer />
