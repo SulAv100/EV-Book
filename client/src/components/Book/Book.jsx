@@ -1,90 +1,60 @@
 import React from "react";
 import "./Book.css";
 import Van from "../../assets/van.jpg";
+import EV from '../../assets/ev.jpg';
+
+const TripCard = ({ imgSrc }) => (
+  <section className="outer-box">
+    <div className="outer-container">
+      <figure>
+        <img src={imgSrc} alt="van" />
+      </figure>
+      <div className="left-book">
+        <div className="destination">
+          <div className="start-point">
+            <span>5:00 AM</span>
+            <span>Kathmandu</span>
+          </div>
+          <div className="time-lapse">
+            <span>10 Hours</span>
+            <span>-----------------------------------------------</span>
+          </div>
+          <div className="start-point">
+            <span>12:00 PM</span>
+            <span>Devghat</span>
+          </div>
+        </div>
+        <div className="time-facility">
+          <div className="departure">
+            <span>Date:</span>
+            <p>Shrawan 15,2081</p>
+          </div>
+          <div className="departure">
+            <span>Seats available:</span>
+            <p className="seats">8 seats</p>
+          </div>
+        </div>
+      </div>
+      <div className="right-book">
+        <div className="middle-box">
+          <span>Per seat from</span>
+          <span className="fare">
+            <p>NPR</p>
+            <p>1600</p>
+          </span>
+          <button>Book Seats</button>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 function Book() {
   return (
-    <section className="booking-part">
-      <h1>Devghat, Town Chowk To Kathmandu, Kalanki</h1>
-      <div className="upper-section">
-        <div className="upper-sub">
-          <span>Devghat Town chowk --- Kathmandu Talanki</span>
-          <span>September 21, 2024</span>
-        </div>
-        <div className="book-section">
-          <figure>
-            <img src={Van} alt="" />
-          </figure>
-          <div className="location">
-            <span>
-              <p>Devghat to</p>
-              <p>Kathmandu</p>
-            </span>
-            <span>
-              <p>BA 1 Kha 9606</p>
-            </span>
-          </div>
-          <div className="time">
-            <div>
-              <i class="fa-solid fa-location-pin"></i>
-              <p>Devghat Town Chowk (5:00 am)</p>
-            </div>
-            <div>
-              <i class="fa-solid fa-location-dot"></i>{" "}
-              <p>Kathmandu Kalanki (12:00 pm)</p>
-            </div>
-          </div>
-          <div className="type">
-            <span>Devghat Micro</span>
-            <span>Coach Type</span>
-          </div>
-          <div className="price">
-            <p>Rs.600</p>
-            <p>Fare/Seat</p>
-          </div>
-          <button className="seat-btn">View Seat</button>
-        </div>
-      </div>
-      <div className="lower-section">
-        <div className="upper-sub">
-          <span>Kathmandu Kalanki --- Devghat Town Hall</span>
-          <span>September 21, 2024</span>
-        </div>
-        <div className="book-section">
-          <figure>
-            <img src={Van} alt="" />
-          </figure>
-          <div className="location">
-            <span>
-              <p>Devghat to</p>
-              <p>Kathmandu</p>
-            </span>
-            <span>
-              <p>BA 1 Kha 9606</p>
-            </span>
-          </div>
-          <div className="time">
-            <div>
-              <i class="fa-solid fa-location-pin"></i>
-              <p>Kathmandu Kalanki (5:00 am)</p>
-            </div>
-            <div>
-              <i class="fa-solid fa-location-dot"></i>
-              <p>Devghat Town Chowk (12:00 pm)</p>
-            </div>
-          </div>
-          <div className="type">
-            <span>Devghat Micro</span>
-            <span>Coach Type</span>
-          </div>
-          <div className="price">
-            <p>Rs.600</p>
-            <p>Fare/Seat</p>
-          </div>
-          <button className="seat-btn">View Seat</button>
-        </div>
-      </div>
-    </section>
+    <>
+      <TripCard imgSrc={Van} />
+      <TripCard imgSrc={EV} />
+    </>
   );
 }
 
