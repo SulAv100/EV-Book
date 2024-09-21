@@ -1,0 +1,115 @@
+.seat-select{
+    border-top: 2px solid rgb(162, 160, 160);
+    margin: 20px 25px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.left-seat-info{
+    border: 1px solid rgb(164, 162, 162);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 10px;
+    border-radius: 10px;
+}
+.wheel{
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+}
+.wheel img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.single-seat {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 5px;
+}
+.single-seat button{
+    padding: 10px 30px;
+    border: 1px solid rgb(139, 139, 139);
+    border-top-left-radius: 10px;
+    border-bottom: 3px solid rgb(139, 139, 139);
+    border-top-right-radius: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+
+
+}
+.single-seat button:hover{
+    background-color: rgb(228, 163, 163);
+    transform: scale(1.1);
+}
+.right-pricing {
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+th, td {
+    text-align: left;
+    border-bottom: 1px solid rgb(200, 200, 200);
+    padding: 10px 15px;
+}
+
+th {
+    background-color: rgb(240, 240, 240);
+}
+
+tr:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.del-seat {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(220, 0, 0);
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.del-seat:hover {
+    background-color: rgb(255, 50, 50);
+    transform: scale(1.05);
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.book-now {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(0, 123, 255);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.book-now:hover {
+    background-color: rgb(0, 105, 217);
+    transform: scale(1.05);
+}

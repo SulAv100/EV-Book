@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Book.css";
 import Van from "../../assets/van.jpg";
-import EV from '../../assets/ev.jpg';
+import EV from "../../assets/ev.jpg";
+import ExpandSeat from "../ExpandSeat/ExpandSeat";
 
-const TripCard = ({ imgSrc }) => (
+const TripCard = ({ imgSrc, handleSeat, isExpanded }) => (
   <section className="outer-box">
     <div className="outer-container">
       <figure>
@@ -27,7 +28,7 @@ const TripCard = ({ imgSrc }) => (
         <div className="time-facility">
           <div className="departure">
             <span>Date:</span>
-            <p>Shrawan 15,2081</p>
+            <p>Shrawan 15, 2081</p>
           </div>
           <div className="departure">
             <span>Seats available:</span>
@@ -42,18 +43,37 @@ const TripCard = ({ imgSrc }) => (
             <p>NPR</p>
             <p>1600</p>
           </span>
-          <button>Book Seats</button>
+          <button onClick={handleSeat}>Book Seats</button>
         </div>
       </div>
     </div>
+    {isExpanded && <ExpandSeat />}
   </section>
 );
 
 function Book() {
+  const [expandedSeats, setExpandedSeats] = useState([false, false]);
+
+  const handleSeat = (index) => {
+    const updatedSeats = expandedSeats.map((seat, i) =>
+      i === index ? !seat : seat
+    );
+    setExpandedSeats(updatedSeats);
+  };
+
   return (
     <>
-      <TripCard imgSrc={Van} />
-      <TripCard imgSrc={EV} />
+      <TripCard
+        imgSrc={Van}
+        handleSeat={() => handleSeat(0)}
+        isExpanded={expandedSeats[0]}
+      />
+
+      <TripCard
+        imgSrc={EV}
+        handleSeat={() => handleSeat(1)}
+        isExpanded={expandedSeats[1]}
+      />
     </>
   );
 }
