@@ -4,6 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const getUserData = async () => {
     try {
@@ -27,8 +28,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getAdminData = async()=>{
+    try{
+      const response = await fetch("http://localhost:3000/api/auth/adminData",{
+        method:'GET',
+        credentials:'include'
+      });
+
+      const data = await response.json();
+      if(!response.ok){
+        console.log("An error as occured");
+        return;
+      }
+      setIsAdmin(true);
+      console.log(data);
+
+
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{getUserData,userData}}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{getUserData,userData, setIsAdmin, getAdminData, isAdmin}}>{children}</AuthContext.Provider>
   );
 };
 

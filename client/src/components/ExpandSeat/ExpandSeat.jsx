@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./ExpandSeat.css";
 import steering from "../../assets/steering-wheel.png";
+import { useAuth } from "../../hooks/authContext";
+import { useNavigate } from "react-router-dom";
 
 function ExpandSeat() {
+  const navigate = useNavigate();
+
+  const { getUserData, userData } = useAuth();
   const seats = [
     { type: "Adult", seat: "A1", price: "Rs 600.00" },
     { type: "Adult", seat: "A2", price: "Rs 600.00" },
@@ -11,6 +16,19 @@ function ExpandSeat() {
     { type: "Adult", seat: "C2", price: "Rs 600.00" },
     // Add more seats as needed
   ];
+
+  const handleBooking = () => {
+    if (!userData) {
+      alert("Please login first");
+      navigate("/login");
+      return;
+    }
+    console.log("Forward");
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <>
@@ -55,14 +73,26 @@ function ExpandSeat() {
                   <td>{seat.type}</td>
                   <td>{seat.seat}</td>
                   <td>{seat.price}</td>
-                  <td><button className="del-seat">Delete</button></td>
+                  <td>
+                    <button className="del-seat">Delete</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="total">
-            <span>Total: Rs {seats.reduce((acc, seat) => acc + parseFloat(seat.price.split(' ')[1]), 0).toFixed(2)}</span>
-            <button className="book-now">Book Now</button>
+            <span>
+              Total: Rs{" "}
+              {seats
+                .reduce(
+                  (acc, seat) => acc + parseFloat(seat.price.split(" ")[1]),
+                  0
+                )
+                .toFixed(2)}
+            </span>
+            <button onClick={handleBooking} className="book-now">
+              Book Now
+            </button>
           </div>
         </div>
       </section>

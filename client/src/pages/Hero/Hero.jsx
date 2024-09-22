@@ -1,17 +1,26 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./Hero.css";
 import Book from "../../components/Book/Book";
 import bImage from "../../assets/background.jpeg";
 import { useAuth } from "../../hooks/authContext";
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
+  const navigate = useNavigate();
 
-  const {getUserData} = useAuth();
+  const { getUserData, getAdminData, isAdmin } = useAuth();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     getUserData();
-  },[])
+  }, []);
+  useEffect(()=>{
+    getAdminData();
+
+  },[isAdmin])
+
+  if (isAdmin) {
+    navigate("/adminLanding");
+  }
 
   return (
     <>

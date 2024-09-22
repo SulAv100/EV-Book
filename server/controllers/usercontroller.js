@@ -95,7 +95,7 @@ const logout = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
-
+    
     const verifyNumber = await adminModel.findOne({ phoneNumber });
 
     if (!verifyNumber) {
@@ -123,4 +123,35 @@ const adminLogin = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getProfile, logout, adminLogin };
+const getAdminProfile = async (req, res) => {
+  try {
+    res.status(200).json(req.user);
+  } catch (error) {
+    return res.status(500).json({ msg: "Server error" });
+  }
+};
+
+
+const adminLogout = async (req, res) => {
+  try {
+    return res
+      .cookie("adminToken", "", {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV = "production",
+        expires: new Date(0),
+      })
+      .json({ msg: "Successfully logged out" });
+  } catch (error) {
+    return res.status(500).json({ msg: "Server error occured" });
+  }
+};
+module.exports = {
+  register,
+  login,
+  getProfile,
+  logout,
+  adminLogin,
+  getAdminProfile,
+  adminLogout
+};

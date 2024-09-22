@@ -1,6 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {Link, useNavigate} from 'react-router-dom'
+import { useAuth } from "../../hooks/authContext";
 
 function AdminLogin() {
+
+  const {getAdminData, isAdmin} = useAuth();
+
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     phoneNumber: "",
     password: "",
@@ -32,10 +40,21 @@ function AdminLogin() {
         }
 
         console.log(data);
+        navigate('/adminLanding');
+
     }
     catch(error){
         console.error(error);
     }
+  }
+
+  useEffect(()=>{
+    getAdminData();
+  },[])
+
+  if(isAdmin){
+    navigate('/adminLanding');
+    return;
   }
 
   return (
