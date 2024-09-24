@@ -8,6 +8,9 @@ import Footer from "./components/Footer/Footer";
 import AdminLogin from "./components/AdminLogin/AdminLogin";
 import AdminLanding from "./pages/AdminLanding/AdminLanding";
 import { useAuth } from "./hooks/authContext";
+import AdminDash from "./components/Admin/AdminDash/AdminDash";
+import TravelSet from "./components/Admin/TravelSet/TravelSet";
+import BookSeat from "./components/Admin/BookSeat/BookSeat";
 
 function App() {
   const { getAdminData, isAdmin } = useAuth();
@@ -19,11 +22,18 @@ function App() {
       <NavBar />
       <div className="main-content">
         <Routes>
+          {/* Public/User Routes */}
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
-          <Route path="/adminLanding" element={<AdminLanding />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminLanding />}>
+            <Route path="/admin" element={<AdminDash />} />
+            <Route path="travelAdmin" element={<TravelSet />} />
+            <Route path="bookData" element={<BookSeat />} />
+          </Route>
         </Routes>
       </div>
       {isAdmin ? <></> : <Footer />}

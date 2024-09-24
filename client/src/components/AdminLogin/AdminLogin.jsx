@@ -40,7 +40,7 @@ function AdminLogin() {
         }
 
         console.log(data);
-        navigate('/adminLanding');
+        navigate('/admin');
 
     }
     catch(error){
@@ -53,7 +53,7 @@ function AdminLogin() {
   },[])
 
   if(isAdmin){
-    navigate('/adminLanding');
+    navigate('/admin');
     return;
   }
 

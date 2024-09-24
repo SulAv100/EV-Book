@@ -23,3 +23,6 @@ aside ul li {
   cursor: pointer;
   gap: 20px;
 }
+a{
+  text-decoration: none;
+}

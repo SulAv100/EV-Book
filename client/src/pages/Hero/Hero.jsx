@@ -10,17 +10,22 @@ function Hero() {
 
   const { getUserData, getAdminData, isAdmin } = useAuth();
 
+  // Fetch user data
   useEffect(() => {
     getUserData();
   }, []);
-  useEffect(()=>{
+
+  // Fetch admin data
+  useEffect(() => {
     getAdminData();
+  }, []);
 
-  },[isAdmin])
-
-  if (isAdmin) {
-    navigate("/adminLanding");
-  }
+  // Handle navigation after rendering based on isAdmin status
+  useEffect(() => {
+    if (isAdmin) {
+      navigate("/admin");
+    }
+  }, [isAdmin, navigate]); // Trigger navigation after `isAdmin` updates
 
   return (
     <>

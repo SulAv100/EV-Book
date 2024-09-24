@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./AdminSide.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/authContext";
 
 function AdminSide() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const {isAdmin, setIsAdmin} = useAuth();
+  const { isAdmin, setIsAdmin } = useAuth();
 
   const handleAdminLogout = async () => {
     try {
@@ -23,35 +23,38 @@ function AdminSide() {
         navigate("/");
         return;
       }
-      console.log("Error has occured");
+      console.log("Error has occurred");
     } catch (error) {
-      console.log("Network error occured");
+      console.log("Network error occurred");
     }
   };
 
+  const menuItems = [
+    { path: "/admin", icon: "fa-house", label: "Dashboard" },
+    { path: "/admin/travelAdmin", icon: "fa-calendar-days", label: "Date Manager" },
+    { path: "/admin/bookData", icon: "fa-book", label: "Seat Booking" },
+  ];
+
   return (
-    <>
-      <aside>
-        <ul>
-          <li>
-            <i class="fa-solid fa-house"></i>
-            <p>Dashboard</p>
-          </li>
-          <li>
-            <i class="fa-regular fa-calendar-days"></i>
-            <p>Date Manager</p>
-          </li>
-          <li>
-            <i class="fa-solid fa-book"></i>
-            <p>Seat Booking</p>
-          </li>
-          <li onClick={handleAdminLogout}>
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <p>Logout</p>
-          </li>
-        </ul>
-      </aside>
-    </>
+    <aside>
+      <ul>
+        {menuItems.map((item, index) => (
+          <Link to={item.path} key={index}>
+            <li
+              className={active === index ? "active" : ""}
+              onClick={() => setActive(index)}
+            >
+              <i className={`fa-solid ${item.icon}`}></i>
+              <p>{item.label}</p>
+            </li>
+          </Link>
+        ))}
+        <li onClick={handleAdminLogout}>
+          <i className="fa-solid fa-right-from-bracket"></i>
+          <p>Logout</p>
+        </li>
+      </ul>
+    </aside>
   );
 }
 

@@ -1,0 +1,59 @@
+.travel-admin {
+    margin-left: 10px;
+    padding: 20px;
+    width: 100%;
+}
+
+.top-button button {
+    border-radius: 10px;
+    border: none;
+    background-color: #2a2344;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+.top-button button:hover {
+    background-color: #493c76;
+}
+
+.travel-table {
+    margin-top: 20px;
+}
+
+.travel-table form {
+    display: flex;
+    flex-direction: column;
+}
+
+.travel-table label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.travel-table input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.travel-table button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 0;
+    border-radius: 8px;
+    border: none;
+    background-color: #2a2344 ;
+    color: white;
+}
+
+.travel-table button[type="submit"]:hover {
+    background-color: #493c76;
+}
+.cover-row{
+    width: 100%;
+    display: flex;
+    flex: 1;
+}

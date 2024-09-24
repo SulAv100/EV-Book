@@ -1,5 +1,16 @@
-.admin-land{
-    display: flex;
+.admin-land {
+    display: flex; /* Enables flexbox layout */
     margin: 20px;
-    justify-content: space-between;
+    justify-content: space-between; /* Space between items */
+    height: calc(100vh - 40px); /* Adjust for margins */
+}
+
+.admin-side {
+    width: 250px; /* Adjust this value as needed */
+}
+
+.admin-content {
+    flex: 1; /* Takes available space */
+    display: flex; /* Enable flexbox for children */
+    flex-direction: column; /* Stack children vertically */
 }
