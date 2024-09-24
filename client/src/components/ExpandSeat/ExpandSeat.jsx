@@ -1,34 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./ExpandSeat.css";
 import steering from "../../assets/steering-wheel.png";
 import { useAuth } from "../../hooks/authContext";
 import { useNavigate } from "react-router-dom";
 
-function ExpandSeat() {
+function ExpandSeat({ price }) {
   const navigate = useNavigate();
+  const [bookedSeat, setBookedSeat] = useState(JSON.parse(localStorage.getItem("seats")) || []);
 
   const { getUserData, userData } = useAuth();
-  const seats = [
-    { type: "Adult", seat: "A1", price: "Rs 600.00" },
-    { type: "Adult", seat: "A2", price: "Rs 600.00" },
-    { type: "Adult", seat: "B1", price: "Rs 600.00" },
-    { type: "Adult", seat: "C1", price: "Rs 600.00" },
-    { type: "Adult", seat: "C2", price: "Rs 600.00" },
-    // Add more seats as needed
-  ];
 
-  const handleBooking = () => {
+  const handleBooking = (seatName) => {
     if (!userData) {
       alert("Please login first");
       navigate("/login");
       return;
+    } else if (!bookedSeat.includes(seatName)) {
+      setBookedSeat((prevState) => [...prevState, seatName]);
+      localStorage.setItem("seats", JSON.stringify(bookedSeat));
+    } else {
+      setBookedSeat((prevState) =>
+        prevState.filter((seat) => seat !== seatName)
+      );
+      localStorage.setItem("seats", JSON.stringify(setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName))));
     }
-    console.log("Forward");
   };
+
+  const handleDelete = (seatName) => {
+    setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName));
+    localStorage.setItem("seats", JSON.stringify(setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName))));
+  };
+
+  const total = bookedSeat.reduce((acc) => acc + parseInt(price), 0);
 
   useEffect(() => {
     getUserData();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("seats", JSON.stringify(bookedSeat));
+  }, [bookedSeat]);
 
   return (
     <>
@@ -38,23 +49,78 @@ function ExpandSeat() {
             <img src={steering} alt="Steering Wheel" />
           </div>
           <div className="single-seat">
-            <button>A1</button>
-            <button>C1</button>
+            <button
+              className={bookedSeat.includes("A1") ? "selected" : ""}
+              onClick={() => handleBooking("A1")}
+            >
+              A1
+            </button>
+            <button
+              className={bookedSeat.includes("C1") ? "selected" : ""}
+              onClick={() => handleBooking("C1")}
+            >
+              C1
+            </button>
           </div>
           <div className="single-seat">
-            <button>A2</button>
-            <button>B1</button>
-            <button>C2</button>
+            <button
+              className={bookedSeat.includes("A2") ? "selected" : ""}
+              onClick={() => handleBooking("A2")}
+            >
+              A2
+            </button>
+            <button
+              className={bookedSeat.includes("B1") ? "selected" : ""}
+              onClick={() => handleBooking("B1")}
+            >
+              B1
+            </button>
+            <button
+              className={bookedSeat.includes("C2") ? "selected" : ""}
+              onClick={() => handleBooking("C2")}
+            >
+              C2
+            </button>
           </div>
           <div className="single-seat">
-            <button>A3</button>
-            <button>B2</button>
-            <button>C3</button>
+            <button
+              className={bookedSeat.includes("A3") ? "selected" : ""}
+              onClick={() => handleBooking("A3")}
+            >
+              A3
+            </button>
+            <button
+              className={bookedSeat.includes("B2") ? "selected" : ""}
+              onClick={() => handleBooking("B2")}
+            >
+              B2
+            </button>
+            <button
+              className={bookedSeat.includes("C3") ? "selected" : ""}
+              onClick={() => handleBooking("C3")}
+            >
+              C3
+            </button>
           </div>
           <div className="single-seat">
-            <button>A4</button>
-            <button>B3</button>
-            <button>C4</button>
+            <button
+              className={bookedSeat.includes("A4") ? "selected" : ""}
+              onClick={() => handleBooking("A4")}
+            >
+              A4
+            </button>
+            <button
+              className={bookedSeat.includes("B3") ? "selected" : ""}
+              onClick={() => handleBooking("B3")}
+            >
+              B3
+            </button>
+            <button
+              className={bookedSeat.includes("C4") ? "selected" : ""}
+              onClick={() => handleBooking("C4")}
+            >
+              C4
+            </button>
           </div>
         </div>
         <div className="right-pricing">
@@ -68,31 +134,26 @@ function ExpandSeat() {
               </tr>
             </thead>
             <tbody>
-              {seats.map((seat, index) => (
+              {bookedSeat?.map((seat, index) => (
                 <tr key={index}>
-                  <td>{seat.type}</td>
-                  <td>{seat.seat}</td>
-                  <td>{seat.price}</td>
+                  <td>Adult</td>
+                  <td>{seat}</td>
+                  <td>{price}</td>
                   <td>
-                    <button className="del-seat">Delete</button>
+                    <button
+                      className="del-seat"
+                      onClick={() => handleDelete(seat)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <div className="total">
-            <span>
-              Total: Rs{" "}
-              {seats
-                .reduce(
-                  (acc, seat) => acc + parseFloat(seat.price.split(" ")[1]),
-                  0
-                )
-                .toFixed(2)}
-            </span>
-            <button onClick={handleBooking} className="book-now">
-              Book Now
-            </button>
+            <span>Total: Rs {total}</span>
+            <button className="book-now">Book Now</button>
           </div>
         </div>
       </section>
