@@ -1,5 +1,6 @@
 const dateModel = require("../models/date-model.js");
 const bookModel = require("../models/booking-model.js");
+const confirmModel = require("../models/confirm-model.js");
 
 const dateFixer = async (req, res) => {
   try {
@@ -111,4 +112,77 @@ const bookData = async (req, res) => {
   }
 };
 
-module.exports = { dateFixer, getTravel, seatBooker, deleteTravel,bookData };
+const confirmBook = async (req, res) => {
+  try {
+    const { bookingData } = req.body;
+    const {
+      _id: bookingId,
+      seatData,
+      vehicleNo,
+      startLocation,
+      destination,
+      date,
+      phoneNumber,
+    } = bookingData;
+
+    const newModelData = new confirmModel({
+      vehicleNo,
+      seatData,
+      phoneNumber,
+      startLocation,
+      destination,
+      date,
+    });
+
+    await newModelData.save();
+
+    const deleteModelData = await bookModel.findByIdAndDelete(bookingId);
+    if (!deleteModelData) {
+      console.log(bookingData.bookingId);
+      return res.status(404).json({ msg: "No such reservation made" });
+    }
+    console.log("Donw");
+
+    return res.status(200).json({ msg: "Successfully saved record" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getConfirmSeat = async (req, res) => {
+  try {
+    const allData = await confirmModel.find();
+    console.log(allData);
+    if (!allData.length > 0) {
+      return res.status(204).json({ msg: "No bookings till now" });
+    }
+    return res.status(200).json({ allData });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteBook = async (req, res) => {
+  try {
+    const { bookingId } = req.body;
+
+    const removeData = await bookModel.findByIdAndDelete(bookingId);
+    if (!removeData) {
+      return res.status(404).json({ msg: "No data found to remove" });
+    }
+    return res.status(200).json("Successfully removed");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = {
+  dateFixer,
+  getTravel,
+  seatBooker,
+  deleteTravel,
+  bookData,
+  confirmBook,
+  getConfirmSeat,
+  deleteBook,
+};

@@ -50,25 +50,23 @@ function ExpandSeat({ item }) {
     localStorage.setItem("seats", JSON.stringify(bookedSeat));
   }, [bookedSeat]);
 
-  const handleBookFetch =  () => {
-    
-      localStorage.setItem(
-        "book",
-        JSON.stringify({
-          seatType: "Adult",
-          seatData: bookedSeat,
-          price: bookedSeat.length * item.price,
-          vehicleNo: item.vehicleNo,
-          startLocation: item.startLocation,
-          departTime: item.departTime,
-          destination: item.destination,
-          droppingTime: item.droppingTime,
-          date: item.date,
-          phoneNumber: userContact,
-        })
-      );
-      navigate("/bookingpage");
-    
+  const handleBookFetch = () => {
+    localStorage.setItem(
+      "book",
+      JSON.stringify({
+        seatType: "Adult",
+        seatData: bookedSeat,
+        price: bookedSeat.length * item.price,
+        vehicleNo: item.vehicleNo,
+        startLocation: item.startLocation,
+        departTime: item.departTime,
+        destination: item.destination,
+        droppingTime: item.droppingTime,
+        date: item.date,
+        phoneNumber: userContact,
+      })
+    );
+    navigate("/bookingpage");
   };
 
   return (

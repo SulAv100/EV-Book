@@ -5,7 +5,17 @@ const adminController = require("../controllers/admincontroller.js");
 router
   .route("/setTravel")
   .post(adminController.dateFixer)
-  .get(adminController.getTravel).delete(adminController.deleteTravel);
-router.route("/bookSeat").post(adminController.seatBooker).get(adminController.bookData);
+  .get(adminController.getTravel)
+  .delete(adminController.deleteTravel);
+router
+  .route("/bookSeat")
+  .post(adminController.seatBooker)
+  .get(adminController.bookData);
+router
+  .route("/confirmBook")
+  .post(adminController.confirmBook)
+  .get(adminController.getConfirmSeat);
+
+  router.route("/deleteBook").post(adminController.deleteBook);
 
 module.exports = router;
