@@ -33,6 +33,7 @@ function AdminSide() {
     { path: "/admin", icon: "fa-house", label: "Dashboard" },
     { path: "/admin/travelAdmin", icon: "fa-calendar-days", label: "Date Manager" },
     { path: "/admin/bookData", icon: "fa-book", label: "Seat Booking" },
+    {path:"/admin/displayTravel", icon: "fa-book",label:"Display Travel"}
   ];
 
   return (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Book.css";
 import Van from "../../assets/van.jpg";
-import EV from "../../assets/ev.jpg";
 import ExpandSeat from "../ExpandSeat/ExpandSeat";
+import { useAuth } from "../../hooks/authContext";
 
 const TripCard = ({ imgSrc, handleSeat, isExpanded, item }) => (
   <section className="outer-box">
@@ -47,13 +47,14 @@ const TripCard = ({ imgSrc, handleSeat, isExpanded, item }) => (
         </div>
       </div>
     </div>
-    {isExpanded && <ExpandSeat price={item.price} />}
+    {isExpanded && <ExpandSeat item={item} />}
   </section>
 );
 
 function Book() {
   const [expandedSeats, setExpandedSeats] = useState([false, false]);
-  const [fetchData, setFetchData] = useState([]);
+
+  const { fetchTravel, fetchData } = useAuth();
 
   const handleSeat = (index) => {
     const updatedSeats = expandedSeats.map((seat, i) =>
@@ -63,36 +64,14 @@ function Book() {
   };
 
   useEffect(() => {
-    const fetchTravel = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/admin/setTravel",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        if (!response.ok) {
-          console.log("An unexpected error has occured");
-          return;
-        }
-        setFetchData(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchTravel();
   }, []);
 
   return (
     <>
-      {fetchData?.map((item,index) => (
-        <TripCard key={index}
+      {fetchData?.map((item, index) => (
+        <TripCard
+          key={index}
           imgSrc={Van}
           handleSeat={() => handleSeat(index)}
           isExpanded={expandedSeats[index]}

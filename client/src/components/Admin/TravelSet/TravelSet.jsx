@@ -6,11 +6,13 @@ function TravelSet() {
   const [formData, setFormData] = useState({
     vehicleNo: "",
     startLocation: "",
+    departTime: "",
     destination: "",
+    droppingTime: "",
     date: "",
     duration: "",
     availableSeats: "",
-    price:""
+    price: "",
   });
 
   const populateForm = (event) => {
@@ -44,11 +46,13 @@ function TravelSet() {
       setFormData({
         vehicleNo: "",
         startLocation: "",
+        departTime: "",
         destination: "",
+        droppingTime: "",
         date: "",
         duration: "",
         availableSeats: "",
-        price:""
+        price: "",
       });
       toggleFormVisibility();
     } catch (error) {
@@ -91,6 +95,15 @@ function TravelSet() {
                   placeholder="Enter your starting point"
                   required
                 />
+                <label htmlFor="departTime">Depart Time</label>
+                <input
+                  name="departTime"
+                  value={formData.departTime}
+                  onChange={(event) => populateForm(event)}
+                  type="text"
+                  placeholder="Enter when  vehicle  departs"
+                  required
+                />
 
                 <label htmlFor="destination">Destination</label>
                 <input
@@ -99,6 +112,15 @@ function TravelSet() {
                   onChange={(event) => populateForm(event)}
                   type="text"
                   placeholder="Enter your destination point"
+                  required
+                />
+                <label htmlFor="droppingTime">Dropping Time</label>
+                <input
+                  name="droppingTime"
+                  value={formData.droppingTime}
+                  onChange={(event) => populateForm(event)}
+                  type="text"
+                  placeholder="Enter when  vehicle  reaches dstination"
                   required
                 />
 

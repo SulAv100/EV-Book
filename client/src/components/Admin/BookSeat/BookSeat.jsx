@@ -1,28 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./BookSeat.css";
 
 function BookSeat() {
   // Sample data for booked seats
-  const [bookings, setBookings] = useState([
-    {
-      id: 1,
-      phoneNumber: "9876543210",
-      busno: "1234w",
-      bookedSeats: ["A1", "B1", "C1"],
-    },
-    {
-      id: 2,
-      phoneNumber: "1234567890",
-      busno: "1234w",
-      bookedSeats: ["D2", "E2", "F2"],
-    },
-    {
-      id: 3,
-      phoneNumber: "5556667777",
-      busno: "1234w",
-      bookedSeats: ["G3", "H3", "I3"],
-    },
-  ]);
+  const [bookings,setBookings] = useState([]);
+
+  const bringBookData = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/admin/bookSeat", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log("Network error occured");
+        return;
+      }
+      setBookings(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    bringBookData();
+  }, []);
+  useEffect(()=>{
+    console.log(bookings);
+  },[bookings]);
 
   // Function to handle confirm action
   const handleConfirm = (id) => {
@@ -46,22 +55,32 @@ function BookSeat() {
             <th>Sn</th>
             <th>Phone Number</th>
             <th>Bus Number</th>
+            <th>Date</th>
             <th>Booked Seats</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((booking, index) => (
-            <tr key={booking.id}>
+            <tr key={booking._id}>
               <td>{index + 1}</td>
               <td>{booking.phoneNumber}</td>
-              <td>{booking.busno}</td>
-              <td>{booking.bookedSeats.join(", ")}</td>
+              <td>{booking.vehicleNo}</td>
+              <td>{booking.date}</td>
+              <td>{booking.seatData.join(',')}</td>
               <td>
-                <button className="confirm" onClick={() => handleConfirm(booking.id)}>
+                <button
+                  className="confirm"
+                  onClick={() => handleConfirm(booking._id)}
+                >
                   Confirm
                 </button>
-                <button className="delete" onClick={() => handleDelete(booking.id)}>Delete</button>
+                <button
+                  className="delete"
+                  onClick={() => handleDelete(booking._id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

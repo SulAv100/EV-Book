@@ -5,6 +5,9 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userContact,setUserContact] = useState("");
+  const [fetchData, setFetchData] = useState([]);
+
 
   const getUserData = async () => {
     try {
@@ -22,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       setUserData(data.firstName);
+      setUserContact(data.phoneNumber);
       console.log(data);
     } catch (error) {
       console.error(error);
@@ -41,7 +45,6 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       setIsAdmin(true);
-      console.log(data);
 
 
     }
@@ -50,8 +53,31 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const fetchTravel = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/admin/setTravel",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        console.log("An unexpected error has occured");
+        return;
+      }
+      setFetchData(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{getUserData,userData, setIsAdmin, getAdminData, isAdmin}}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{getUserData,userData, setIsAdmin,userContact, getAdminData, isAdmin, fetchTravel, fetchData}}>{children}</AuthContext.Provider>
   );
 };
 

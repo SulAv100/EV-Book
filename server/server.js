@@ -4,6 +4,7 @@ const connectDb = require("./utils/db")
 const cors = require("cors");
 const  cookieParser = require("cookie-parser")
 const authRoute = require("./routers/auth-router");
+const adminRoute = require("./routers/admin-router")
 
 const app = express(); //This lines gives the control of express to app variable
 
@@ -22,6 +23,7 @@ app.use(express.json());//allows data requirest and response in json format
 app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
+app.use("/api/admin",adminRoute);
 
 connectDb().then(() => {
   const PORT = process.env.POST || 3000;

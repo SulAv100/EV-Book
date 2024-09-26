@@ -1,0 +1,33 @@
+.display-travel {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .travel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .travel-table th, .travel-table td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .travel-table th {
+    background-color: #2a2344;
+  }
+  
+  .delete-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .delete-button:hover {
+    background-color: #d32f2f;
+  }
+  

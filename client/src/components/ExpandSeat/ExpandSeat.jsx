@@ -4,11 +4,20 @@ import steering from "../../assets/steering-wheel.png";
 import { useAuth } from "../../hooks/authContext";
 import { useNavigate } from "react-router-dom";
 
-function ExpandSeat({ price }) {
+function ExpandSeat({ item }) {
   const navigate = useNavigate();
-  const [bookedSeat, setBookedSeat] = useState(JSON.parse(localStorage.getItem("seats")) || []);
+  // Parse localStorage seats value or default to an empty array if it's null
+  const [bookedSeat, setBookedSeat] = useState([]);
 
-  const { getUserData, userData } = useAuth();
+  useEffect(() => {
+    let seatData = JSON.parse(localStorage.getItem("seats"));
+    if (seatData === undefined) {
+      seatData = "[]";
+    }
+    setBookedSeat(seatData);
+  }, []);
+
+  const { getUserData, userData, userContact } = useAuth();
 
   const handleBooking = (seatName) => {
     if (!userData) {
@@ -17,29 +26,50 @@ function ExpandSeat({ price }) {
       return;
     } else if (!bookedSeat.includes(seatName)) {
       setBookedSeat((prevState) => [...prevState, seatName]);
-      localStorage.setItem("seats", JSON.stringify(bookedSeat));
     } else {
       setBookedSeat((prevState) =>
         prevState.filter((seat) => seat !== seatName)
       );
-      localStorage.setItem("seats", JSON.stringify(setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName))));
     }
   };
 
   const handleDelete = (seatName) => {
     setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName));
-    localStorage.setItem("seats", JSON.stringify(setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName))));
   };
 
-  const total = bookedSeat.reduce((acc) => acc + parseInt(price), 0);
+  const total = bookedSeat.reduce((acc, data) => acc + parseInt(item.price), 0);
 
   useEffect(() => {
     getUserData();
   }, []);
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   useEffect(() => {
     localStorage.setItem("seats", JSON.stringify(bookedSeat));
   }, [bookedSeat]);
+
+  const handleBookFetch =  () => {
+    
+      localStorage.setItem(
+        "book",
+        JSON.stringify({
+          seatType: "Adult",
+          seatData: bookedSeat,
+          price: bookedSeat.length * item.price,
+          vehicleNo: item.vehicleNo,
+          startLocation: item.startLocation,
+          departTime: item.departTime,
+          destination: item.destination,
+          droppingTime: item.droppingTime,
+          date: item.date,
+          phoneNumber: userContact,
+        })
+      );
+      navigate("/bookingpage");
+    
+  };
 
   return (
     <>
@@ -125,20 +155,27 @@ function ExpandSeat({ price }) {
         </div>
         <div className="right-pricing">
           <table>
-            <thead>
-              <tr>
-                <th>Seat Type</th>
-                <th>Seat</th>
-                <th>Price</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+            {bookedSeat?.length >= 1 ? (
+              <>
+                {" "}
+                <thead>
+                  <tr>
+                    <th>Seat Type</th>
+                    <th>Seat</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </>
+            ) : (
+              <></>
+            )}
             <tbody>
               {bookedSeat?.map((seat, index) => (
                 <tr key={index}>
                   <td>Adult</td>
                   <td>{seat}</td>
-                  <td>{price}</td>
+                  <td>{item.price}</td>
                   <td>
                     <button
                       className="del-seat"
@@ -151,10 +188,18 @@ function ExpandSeat({ price }) {
               ))}
             </tbody>
           </table>
-          <div className="total">
-            <span>Total: Rs {total}</span>
-            <button className="book-now">Book Now</button>
-          </div>
+          {bookedSeat?.length >= 1 ? (
+            <>
+              <div className="total">
+                <span>Total: Rs {total}</span>
+                <button onClick={handleBookFetch} className="book-now">
+                  Book Now
+                </button>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </section>
     </>

@@ -4,6 +4,7 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .left-seat-info{
     border: 1px solid rgb(164, 162, 162);
@@ -117,3 +118,11 @@ tr:hover {
     background-color: rgb(235, 120, 120);
     color: white;
 }
+@media (max-width: 700px) {
+   
+    .seat-select{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+  }

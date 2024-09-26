@@ -1,0 +1,113 @@
+.booking-page {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+.booking-title {
+    padding: 5px 20px;
+    font-size: 25px;
+}
+
+.info-section {
+    border-top: 2px solid blue;
+    padding: 10px 20px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.left-info i {
+    color: #3166ba;
+    font-size: 20px;
+}
+
+.left-info span {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+.right-info button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #3166ba;
+    color: white;
+    letter-spacing: 0.4px;
+}
+
+.full-data {
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+}
+
+.route-title {
+    color: rgb(232, 138, 138);
+}
+
+.details-header {
+    margin-top: 5px;
+}
+
+.fa-trash {
+    color: red;
+    cursor: pointer;
+}
+
+.book-location {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    border-radius: 10px;
+    border: 1px solid rgb(165, 165, 165);
+}
+
+.single-book {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.order-button {
+    padding: 10px 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    color: white;
+    background-color: #3166ba;
+}
+
+@media (max-width: 768px) {
+    .info-section {
+        flex-direction: row;
+        
+        align-items: center;
+        gap: 10px;
+    }
+
+    .booking-table {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+    }
+}

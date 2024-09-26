@@ -11,7 +11,8 @@ import { useAuth } from "./hooks/authContext";
 import AdminDash from "./components/Admin/AdminDash/AdminDash";
 import TravelSet from "./components/Admin/TravelSet/TravelSet";
 import BookSeat from "./components/Admin/BookSeat/BookSeat";
-
+import BookingPage from "./pages/Payment/BookingPage";
+import DisplayTravel from "./components/Admin/DisplayTravel/DisplayTravel";
 function App() {
   const { getAdminData, isAdmin } = useAuth();
   useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<Hero />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/bookingpage" element={<BookingPage />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
 
           {/* Admin Routes */}
@@ -33,6 +35,7 @@ function App() {
             <Route path="/admin" element={<AdminDash />} />
             <Route path="travelAdmin" element={<TravelSet />} />
             <Route path="bookData" element={<BookSeat />} />
+            <Route path="displayTravel" element={<DisplayTravel/>} />
           </Route>
         </Routes>
       </div>

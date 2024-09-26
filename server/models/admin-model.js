@@ -26,5 +26,7 @@ adminSchema.methods.generateAdminToken = function(){
    
 };
 
+
+
 const adminModel = mongoose.model("Admin", adminSchema);
 module.exports = adminModel;

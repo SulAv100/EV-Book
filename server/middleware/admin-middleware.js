@@ -5,7 +5,7 @@ const adminMiddleware = async (req, res, next) => {
   const adminToken = req.cookies.adminToken;
 
   if (!adminToken || adminToken === undefined) {
-    return res.status(402).json({ msg: "Invalid authentication" });
+    return res.status(401).json({ msg: "Invalid authentication" });
   }
   try {
     const decoded = jwt.verify(adminToken, process.env.JWT_SECRET_KEY);
