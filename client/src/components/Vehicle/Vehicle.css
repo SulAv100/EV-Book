@@ -1,0 +1,110 @@
+/* Card container for each vehicle */
+.vehicle-card {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fdfdfd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Center card horizontally */
+    max-width: 700px;
+    width: 90%; /* Responsive width */
+    box-sizing: border-box; /* Include padding and border in total width and height */
+  }
+  
+  /* Vehicle image styling */
+  .vehicle-image {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px; /* Space between image and details */
+  }
+  
+  /* Container for vehicle details */
+  .vehicle-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  /* Grouping details */
+  .details-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  /* Detail row styling */
+  .detail-row {
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly */
+    margin-bottom: 15px;
+  }
+  
+  /* Detail column styling */
+  .detail-column {
+    flex: 1;
+    margin-right: 20px; /* Space between columns */
+  }
+  
+  /* Remove margin from last column in row */
+  .detail-row .detail-column:last-child {
+    margin-right: 0;
+  }
+  
+  /* Labels and values styling */
+  .detail-label {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #333; /* Dark color for labels */
+    font-weight: 600; /* Bold labels */
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .detail-value {
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    color: #666; /* Slightly lighter color for values */
+  }
+  
+  /* Special styling for fare */
+  .fare {
+    font-weight: bold;
+    color: #e53935;
+    font-size: 18px;
+  }
+  
+  /* Container for button and footer */
+  .details-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Styling for the book button */
+  .book-button {
+    background-color: #007bff; /* Bright blue for prominence */
+    border: none;
+    padding: 12px 24px; /* Slightly larger padding for a more prominent button */
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: 600; /* Bold text for emphasis */
+    transition: background-color 0.3s, transform 0.2s;
+    text-align: center; /* Center text inside button */
+  }
+  
+  .book-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slight scale effect on hover */
+  }
+  
+  .book-button:focus {
+    outline: none;
+  }
+  

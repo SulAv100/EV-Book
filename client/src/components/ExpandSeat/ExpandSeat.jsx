@@ -4,37 +4,42 @@ import steering from "../../assets/steering-wheel.png";
 import { useAuth } from "../../hooks/authContext";
 import { useNavigate } from "react-router-dom";
 
-function ExpandSeat({ item }) {
+function ExpandSeat({
+  item,
+  userBookedSeats = [], // Ensure it's an array
+  otherBookedSeats,
+  confirmedSeats,
+  setUserBookedSeats,
+}) {
   const navigate = useNavigate();
-  // Parse localStorage seats value or default to an empty array if it's null
   const [bookedSeat, setBookedSeat] = useState([]);
 
   useEffect(() => {
-    let seatData = JSON.parse(localStorage.getItem("seats"));
-    if (seatData === undefined) {
-      seatData = "[]";
-    }
-    setBookedSeat(seatData);
-  }, []);
+    const initialBookedSeats = JSON.parse(localStorage.getItem("seats")) || [];
+    const uniqueSeats = Array.from(new Set([...initialBookedSeats, ...userBookedSeats]));
+    setBookedSeat(uniqueSeats);
+  }, [userBookedSeats]);
 
-  const { getUserData, userData, userContact } = useAuth();
+  const { getUserData, userContact } = useAuth();
 
   const handleBooking = (seatName) => {
-    if (!userData) {
-      alert("Please login first");
-      navigate("/login");
-      return;
-    } else if (!bookedSeat.includes(seatName)) {
-      setBookedSeat((prevState) => [...prevState, seatName]);
-    } else {
-      setBookedSeat((prevState) =>
-        prevState.filter((seat) => seat !== seatName)
-      );
-    }
-  };
+    // Check if the seat is already booked by the user
+    const isAlreadyBooked = bookedSeat.includes(seatName);
+    
+    // Toggle the seat selection
+    setBookedSeat((prev) => 
+      isAlreadyBooked 
+      ? prev.filter(seat => seat !== seatName) // Remove seat if already booked
+      : [...prev, seatName] // Add seat if not booked
+    );
 
-  const handleDelete = (seatName) => {
-    setBookedSeat((prevState) => prevState.filter((seat) => seat !== seatName));
+    // Update userBookedSeats in the parent component
+    setUserBookedSeats((prevState) => ({
+      ...prevState,
+      [item.index]: isAlreadyBooked 
+        ? (prevState[item.index] || []).filter(seat => seat !== seatName) // Remove from booked seats, ensure it is an array
+        : [...(prevState[item.index] || []), seatName], // Add to booked seats, ensure it is an array
+    }));
   };
 
   const total = bookedSeat.reduce((acc, data) => acc + parseInt(item.price), 0);
@@ -42,165 +47,125 @@ function ExpandSeat({ item }) {
   useEffect(() => {
     getUserData();
   }, []);
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   useEffect(() => {
     localStorage.setItem("seats", JSON.stringify(bookedSeat));
   }, [bookedSeat]);
 
   const handleBookFetch = () => {
-    localStorage.setItem(
-      "book",
-      JSON.stringify({
-        seatType: "Adult",
-        seatData: bookedSeat,
-        price: bookedSeat.length * item.price,
-        vehicleNo: item.vehicleNo,
-        startLocation: item.startLocation,
-        departTime: item.departTime,
-        destination: item.destination,
-        droppingTime: item.droppingTime,
-        date: item.date,
-        phoneNumber: userContact,
-      })
-    );
+    localStorage.setItem("book", JSON.stringify({
+      seatType: "Adult",
+      seatData: bookedSeat,
+      price: bookedSeat.length * item.price,
+      vehicleNo: item.vehicleNo,
+      startLocation: item.startLocation,
+      departTime: item.departTime,
+      destination: item.destination,
+      droppingTime: item.droppingTime,
+      date: item.date,
+      phoneNumber: userContact,
+    }));
     navigate("/bookingpage");
   };
 
+  const renderSeatButton = (seatName) => {
+    const isBooked = bookedSeat.includes(seatName);
+    const isUserBooked = Array.isArray(userBookedSeats) && userBookedSeats.includes(seatName);
+    const isOtherBooked = Array.isArray(otherBookedSeats) && otherBookedSeats.includes(seatName);
+    const isConfirmed = Array.isArray(confirmedSeats) && confirmedSeats.includes(seatName);
+
+    let buttonStyle = {
+      cursor: "pointer",
+    };
+    
+    if (isConfirmed) {
+      buttonStyle = {
+        backgroundColor: "red",
+        color: "white",
+        cursor: "not-allowed",
+      };
+    } else if (isOtherBooked) {
+      buttonStyle = {
+        backgroundColor: "blue",
+        color: "white",
+        cursor: "not-allowed",
+      };
+    } else if (isUserBooked || isBooked) {
+      buttonStyle = {
+        backgroundColor: "lightcoral", // Change color when booked
+        color: "white",
+      };
+    }
+
+    return (
+      <button
+        key={seatName}
+        className={`seat-button ${isUserBooked ? "user-booked" : isOtherBooked ? "other-booked" : ""}`}
+        onClick={isConfirmed || isOtherBooked ? null : () => handleBooking(seatName)}
+        style={buttonStyle}
+      >
+        {seatName}
+      </button>
+    );
+  };
+
   return (
-    <>
-      <section className="seat-select">
-        <div className="left-seat-info">
-          <div className="wheel">
-            <img src={steering} alt="Steering Wheel" />
-          </div>
-          <div className="single-seat">
-            <button
-              className={bookedSeat.includes("A1") ? "selected" : ""}
-              onClick={() => handleBooking("A1")}
-            >
-              A1
-            </button>
-            <button
-              className={bookedSeat.includes("C1") ? "selected" : ""}
-              onClick={() => handleBooking("C1")}
-            >
-              C1
-            </button>
-          </div>
-          <div className="single-seat">
-            <button
-              className={bookedSeat.includes("A2") ? "selected" : ""}
-              onClick={() => handleBooking("A2")}
-            >
-              A2
-            </button>
-            <button
-              className={bookedSeat.includes("B1") ? "selected" : ""}
-              onClick={() => handleBooking("B1")}
-            >
-              B1
-            </button>
-            <button
-              className={bookedSeat.includes("C2") ? "selected" : ""}
-              onClick={() => handleBooking("C2")}
-            >
-              C2
-            </button>
-          </div>
-          <div className="single-seat">
-            <button
-              className={bookedSeat.includes("A3") ? "selected" : ""}
-              onClick={() => handleBooking("A3")}
-            >
-              A3
-            </button>
-            <button
-              className={bookedSeat.includes("B2") ? "selected" : ""}
-              onClick={() => handleBooking("B2")}
-            >
-              B2
-            </button>
-            <button
-              className={bookedSeat.includes("C3") ? "selected" : ""}
-              onClick={() => handleBooking("C3")}
-            >
-              C3
-            </button>
-          </div>
-          <div className="single-seat">
-            <button
-              className={bookedSeat.includes("A4") ? "selected" : ""}
-              onClick={() => handleBooking("A4")}
-            >
-              A4
-            </button>
-            <button
-              className={bookedSeat.includes("B3") ? "selected" : ""}
-              onClick={() => handleBooking("B3")}
-            >
-              B3
-            </button>
-            <button
-              className={bookedSeat.includes("C4") ? "selected" : ""}
-              onClick={() => handleBooking("C4")}
-            >
-              C4
-            </button>
-          </div>
+    <section className="seat-select">
+      <div className="left-seat-info">
+        <div className="wheel">
+          <img src={steering} alt="Steering Wheel" />
         </div>
-        <div className="right-pricing">
-          <table>
-            {bookedSeat?.length >= 1 ? (
-              <>
-                {" "}
-                <thead>
-                  <tr>
-                    <th>Seat Type</th>
-                    <th>Seat</th>
-                    <th>Price</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-              </>
-            ) : (
-              <></>
-            )}
-            <tbody>
-              {bookedSeat?.map((seat, index) => (
-                <tr key={index}>
-                  <td>Adult</td>
-                  <td>{seat}</td>
-                  <td>{item.price}</td>
-                  <td>
-                    <button
-                      className="del-seat"
-                      onClick={() => handleDelete(seat)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {bookedSeat?.length >= 1 ? (
-            <>
-              <div className="total">
-                <span>Total: Rs {total}</span>
-                <button onClick={handleBookFetch} className="book-now">
-                  Book Now
-                </button>
-              </div>
-            </>
-          ) : (
-            <></>
+        <div className="single-seat">
+          {["A1", "C1"].map(renderSeatButton)}
+        </div>
+        <div className="single-seat">
+          {["A2", "B1", "C2"].map(renderSeatButton)}
+        </div>
+        <div className="single-seat">
+          {["A3", "B2", "C3"].map(renderSeatButton)}
+        </div>
+        <div className="single-seat">
+          {["A4", "B3", "C4"].map(renderSeatButton)}
+        </div>
+      </div>
+      <div className="right-pricing">
+        <table>
+          {bookedSeat.length > 0 && (
+            <thead>
+              <tr>
+                <th>Seat Type</th>
+                <th>Seat</th>
+                <th>Price</th>
+                <th>Action</th>
+              </tr>
+            </thead>
           )}
-        </div>
-      </section>
-    </>
+          <tbody>
+            {/* Display user booked and currently selected seats */}
+            {[...new Set([...userBookedSeats, ...bookedSeat])].map((seat, index) => (
+              <tr key={index}>
+                <td>Adult</td>
+                <td>{seat}</td>
+                <td>{item.price}</td>
+                <td>
+                  <button className="del-seat" onClick={() => handleBooking(seat)}>
+                    {bookedSeat.includes(seat) ? "Remove" : "Add"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {bookedSeat.length >= 1 && (
+          <div className="total">
+            <span>Total: Rs {total}</span>
+            <button onClick={handleBookFetch} className="book-now">
+              Book Now
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 

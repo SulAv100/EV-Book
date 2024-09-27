@@ -1,14 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminDash.css";
 
 function AdminDash() {
-  const bookings = [
-    { sn: 1, phoneNumber: "9876543210", busNo: "AB-1234", seatBooked: 12 },
-    { sn: 2, phoneNumber: "9876543211", busNo: "AB-5678", seatBooked: 20 },
-    { sn: 3, phoneNumber: "9876543212", busNo: "AB-4321", seatBooked: 10 },
-    { sn: 4, phoneNumber: "9876543213", busNo: "AB-8765", seatBooked: 25 },
-    { sn: 5, phoneNumber: "9876543214", busNo: "AB-9876", seatBooked: 18 },
-  ];
+  const [dashData, setDashData] = useState({});
+  const [bookings, setBookings] = useState([]);
+
+  const fetchDashData = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/admin/getDashData",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return console.log("Some error has occured");
+      }
+      setDashData(data);
+      setBookings(data.totalBookings);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashData();
+  }, []);
+  useEffect(() => {
+    console.log(bookings);
+  }, [dashData]);
+
   return (
     <>
       <section className="left-dash">
@@ -16,21 +41,25 @@ function AdminDash() {
           <div className="single-dash">
             <span className="left-single">
               <p>Total Users</p>
-              <h2>500</h2>
+              <h2>{dashData.totalUsers}</h2>
             </span>
             <i class="fa-solid fa-user"></i>
           </div>
           <div className="single-dash">
             <span className="left-single">
               <p>Total Bookings</p>
-              <h2>500</h2>
+              <h2>{dashData.totalBooks}</h2>
             </span>
             <i class="fa-solid fa-couch"></i>
           </div>
           <div className="single-dash">
             <span className="left-single">
               <p>Total Vehicle</p>
-              <h2>2</h2>
+              <h2>
+                {dashData && dashData.totalVehicle
+                  ? dashData.totalVehicle.length
+                  : "N/A"}
+              </h2>
             </span>
             <i class="fa-solid fa-van-shuttle"></i>
           </div>
@@ -43,7 +72,7 @@ function AdminDash() {
           </div>
         </div>
         <section className="table-container">
-            <h2 className="book-table">Recent Bookings</h2>
+          <h2 className="book-table">Recent Bookings</h2>
           <table className="bookings-table">
             <thead>
               <tr>
@@ -54,12 +83,16 @@ function AdminDash() {
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.sn}>
-                  <td>{booking.sn}</td>
+              {bookings.map((booking, index) => (
+                <tr key={booking._id}>
+                  <td>{index + 1}</td>
                   <td>{booking.phoneNumber}</td>
-                  <td>{booking.busNo}</td>
-                  <td>{booking.seatBooked}</td>
+                  <td>{booking.vehicleNo}</td>
+                  <td>
+                    {booking && booking.seatData
+                      ? booking.seatData.length
+                      : "N/A"}
+                  </td>
                 </tr>
               ))}
             </tbody>

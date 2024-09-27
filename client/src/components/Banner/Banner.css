@@ -1,0 +1,18 @@
+.banner-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1250px;
+    margin: 0 auto; /* Center the container */
+  }
+  
+  .banner {
+    margin-bottom: 10px; /* Space between banners */
+  }
+  
+  .banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  

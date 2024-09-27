@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
       }
       setUserData(data.firstName);
       setUserContact(data.phoneNumber);
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -41,7 +40,6 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       if(!response.ok){
-        console.log("An error as occured");
         return;
       }
       setIsAdmin(true);
@@ -70,7 +68,6 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       setFetchData(data);
-      console.log(data);
     } catch (error) {
       console.error(error);
     }

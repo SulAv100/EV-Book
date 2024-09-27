@@ -114,10 +114,7 @@ tr:hover {
     background-color: rgb(0, 105, 217);
     transform: scale(1.05);
 }
-.selected{
-    background-color: rgb(235, 120, 120);
-    color: white;
-}
+
 @media (max-width: 700px) {
    
     .seat-select{
@@ -126,3 +123,6 @@ tr:hover {
         justify-content: center;
     }
   }
+
+
+  
