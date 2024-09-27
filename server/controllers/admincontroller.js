@@ -1,6 +1,7 @@
 const dateModel = require("../models/date-model.js");
 const bookModel = require("../models/booking-model.js");
 const confirmModel = require("../models/confirm-model.js");
+const userModel = require("../models/user-model.js");
 
 const dateFixer = async (req, res) => {
   try {
@@ -126,6 +127,7 @@ const confirmBook = async (req, res) => {
     } = bookingData;
 
     const newModelData = new confirmModel({
+      bookingId,
       vehicleNo,
       seatData,
       phoneNumber,
@@ -176,6 +178,71 @@ const deleteBook = async (req, res) => {
   }
 };
 
+const getAllData = async (req, res) => {
+  try {
+    const bookedData = await confirmModel.find();
+    const bookLength = bookedData.length;
+
+    const totalUsers = await userModel.find();
+    const userNumber = totalUsers.length;
+
+    const vehicleData = await dateModel.find().select("vehicleNo");
+    const uniqueVehicleNos = [
+      ...new Set(vehicleData.map((item) => item.vehicleNo)),
+    ];
+
+    const recentBookings = await bookModel.find();
+
+    if (!bookedData || !totalUsers || !vehicleData) {
+      return res.status(404).json({ msg: "Didnt found any relevant data" });
+    }
+    return res.status(202).json({
+      totalBooks: bookLength,
+      totalUsers: userNumber,
+      totalVehicle: uniqueVehicleNos,
+      totalBookings: recentBookings,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const sendBookData = async (req, res) => {
+  try {
+    const { date, vehicleNo, userContact } = req.body;
+
+    let userBooked = await bookModel.find({
+      phoneNumber: userContact,
+      date,
+      vehicleNo,
+    });
+    if (!userBooked || userBooked.length === 0) {
+      userBooked = null;
+    }
+    console.log("User le haneko book", userBooked);
+
+    let findBooked = await bookModel.find({
+      date,
+      vehicleNo,
+      phoneNumber: { $ne: userContact },
+    });
+
+    if (!findBooked || findBooked.length === 0) {
+      findBooked = null;
+    }
+
+    console.log("User le nahaneko book", findBooked);
+    let findConfirmed = await confirmModel.find({ date, vehicleNo });
+
+    if (!findConfirmed || findConfirmed.length === 0) {
+      findConfirmed = null;
+    }
+    return res.status(200).json({ userBooked, findBooked, findConfirmed });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   dateFixer,
   getTravel,
@@ -185,4 +252,6 @@ module.exports = {
   confirmBook,
   getConfirmSeat,
   deleteBook,
+  getAllData,
+  sendBookData,
 };

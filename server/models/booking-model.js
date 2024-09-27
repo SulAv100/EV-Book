@@ -40,7 +40,7 @@ const bookingSchema = new mongoose.Schema({
   phoneNumber: {
     type: String,
     required: true,
-  },
+  }
 });
 
 const bookModel = mongoose.model("Book", bookingSchema);

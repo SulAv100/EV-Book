@@ -17,5 +17,8 @@ router
   .get(adminController.getConfirmSeat);
 
   router.route("/deleteBook").post(adminController.deleteBook);
+  router.route("/getDashData").get(adminController.getAllData);
+
+  router.route('/getBookData').post(adminController.sendBookData);
 
 module.exports = router;
