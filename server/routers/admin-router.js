@@ -18,6 +18,8 @@ router
 
   router.route("/deleteBook").post(adminController.deleteBook);
   router.route("/getDashData").get(adminController.getAllData);
+  router.route("/getUserSeat").post(adminController.getUserSeat);
+
 
   router.route('/getBookData').post(adminController.sendBookData);
 

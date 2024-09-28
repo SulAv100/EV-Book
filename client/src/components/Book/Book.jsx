@@ -3,81 +3,90 @@ import "./Book.css";
 import Van from "../../assets/van.jpg";
 import ExpandSeat from "../ExpandSeat/ExpandSeat";
 import { useAuth } from "../../hooks/authContext";
+
 const TripCard = ({
   imgSrc,
   handleSeat,
   isExpanded,
   item,
   userBookedSeats,
+  userBookingId,
   otherBookedSeats,
   confirmedSeats,
   setUserBookedSeats,
-}) => (
-  <section className="outer-box">
-    <div className="outer-container">
-      <figure>
-        <img src={imgSrc} alt="van" />
-      </figure>
-      <div className="left-book">
-        <div className="destination">
-          <div className="start-point">
-            <span>5:00 AM</span>
-            <span>{item.startLocation}</span>
+  showCloseButton,
+  onCloseClick,
+}) => {
+  return (
+    <section className="outer-box">
+      <div className="outer-container">
+        <figure>
+          <img src={imgSrc} alt="van" />
+        </figure>
+        <div className="left-book">
+          <div className="destination">
+            <div className="start-point">
+              <span>5:00 PM</span>
+              <span>{item.startLocation}</span>
+            </div>
+            <div className="time-lapse">
+              <span>{item.duration}</span>
+              <span>-----------------------------------------------</span>
+            </div>
+            <div className="start-point">
+              <span>12:00 PM</span>
+              <span>{item.destination}</span>
+            </div>
           </div>
-          <div className="time-lapse">
-            <span>{item.duration}</span>
-            <span>-----------------------------------------------</span>
-          </div>
-          <div className="start-point">
-            <span>12:00 PM</span>
-            <span>{item.destination}</span>
+          <div className="time-facility">
+            <div className="departure">
+              <span>Date:</span>
+              <p>{item.date}</p>
+            </div>
+            <div className="vehicle">
+              <span>Vehicle:</span>
+              <p>{item.vehicleNo}</p>
+            </div>
+            <div className="departure">
+              <span>Total Seats:</span>
+              <p className="seats">{item.availableSeats}</p>
+            </div>
           </div>
         </div>
-        <div className="time-facility">
-          <div className="departure">
-            <span>Date:</span>
-            <p>{item.date}</p>
-          </div>
-          <div className="vehicle">
-            <span>Vehicle:</span>
-            <p>{item.vehicleNo}</p>
-          </div>
-          <div className="departure">
-            <span>Seats available:</span>
-            <p className="seats">{item.availableSeats}</p>
+        <div className="right-book">
+          <div className="middle-box">
+            <span>Per seat fare</span>
+            <span className="fare">
+              <p>NPR</p>
+              <p>{item.price}</p>
+            </span>
+            {showCloseButton ? (
+              <button onClick={onCloseClick}>Close</button>
+            ) : (
+              <button onClick={() => handleSeat(item.date, item.vehicleNo)}>
+                Book Seats
+              </button>
+            )}
           </div>
         </div>
       </div>
-      <div className="right-book">
-        <div className="middle-box">
-          <span>Per seat from</span>
-          <span className="fare">
-            <p>NPR</p>
-            <p>{item.price}</p>
-          </span>
-          <button onClick={() => handleSeat(item.date, item.vehicleNo)}>
-            Book Seats
-          </button>
-        </div>
-      </div>
-    </div>
-    {isExpanded && (
-      <ExpandSeat
-        item={item}
-        userBookedSeats={userBookedSeats}
-        otherBookedSeats={otherBookedSeats}
-        confirmedSeats={confirmedSeats}
-        setUserBookedSeats={setUserBookedSeats}
-      />
-    )}
-  </section>
-);
-
-
+      {isExpanded && (
+        <ExpandSeat
+          item={item}
+          userBookedSeats={userBookedSeats}
+          userBookingId={userBookingId}
+          otherBookedSeats={otherBookedSeats}
+          confirmedSeats={confirmedSeats}
+          setUserBookedSeats={setUserBookedSeats}
+        />
+      )}
+    </section>
+  );
+};
 
 function Book() {
   const [expandedSeats, setExpandedSeats] = useState([]);
-  const [userBookedSeats, setUserBookedSeats] = useState({});
+  const [userBookedSeats, setUserBookedSeats] = useState({}); // This stores seat data per trip
   const [otherBookedSeats, setOtherBookedSeats] = useState([]);
   const [confirmedSeats, setConfirmedSeats] = useState([]);
   const { fetchTravel, fetchData, userContact, getUserData } = useAuth();
@@ -91,12 +100,24 @@ function Book() {
       setExpandedSeats(new Array(fetchData.length).fill(false));
     }
   }, [fetchData]);
-
   const handleSeat = async (index, date, vehicleNo) => {
-    const updatedSeats = expandedSeats.map((seat, i) =>
-      i === index ? !seat : seat
-    );
+    // Close all seats first
+    const updatedSeats = new Array(expandedSeats.length).fill(false);
+    updatedSeats[index] = true; // Set the clicked seat to true
     setExpandedSeats(updatedSeats);
+
+    // Clear seat data for the selected trip only, not for all trips
+    setUserBookedSeats((prevState) => ({
+      ...prevState,
+      [index]: {
+        seats: [], // Clear seat data for this specific trip
+        bookingIds: [], // Clear booking IDs for this specific trip
+      },
+    }));
+
+    // Clear other seats and confirmed seats only for this trip
+    setOtherBookedSeats([]);
+    setConfirmedSeats([]);
 
     try {
       const response = await fetch(
@@ -109,16 +130,21 @@ function Book() {
           body: JSON.stringify({ date, vehicleNo, userContact }),
         }
       );
+
       const data = await response.json();
 
       if (response.ok) {
-        const userBookedData = [];
-        const otherBookedData = [];
-        const confirmedData = [];
+        console.log(data);
+
+        let userBookedData = [];
+        let userBookingIds = [];
+        let otherBookedData = [];
+        let confirmedData = [];
 
         if (data.userBooked && Array.isArray(data.userBooked)) {
           data.userBooked.forEach((booking) => {
             userBookedData.push(...booking.seatData);
+            userBookingIds.push(booking._id); // Get booking ID
           });
         }
 
@@ -134,14 +160,20 @@ function Book() {
           });
         }
 
-        // Update userBookedSeats by trip index
+        // Update the seat data for the current trip (index)
         setUserBookedSeats((prevState) => ({
           ...prevState,
-          [index]: userBookedData, // Store data for the specific trip
+          [index]: {
+            seats: userBookedData,
+            bookingIds: userBookingIds,
+          },
         }));
-        
-        setOtherBookedSeats((prevState) => [...prevState, ...otherBookedData]);
-        setConfirmedSeats((prevState) => [...prevState, ...confirmedData]);
+
+        // Update other booked and confirmed seats
+        setOtherBookedSeats(otherBookedData);
+        setConfirmedSeats(confirmedData);
+
+        console.log("Booking IDs for trip index", index, ":", userBookingIds);
       }
     } catch (error) {
       console.error("Error fetching booked seats:", error);
@@ -161,10 +193,11 @@ function Book() {
           handleSeat={(date, vehicleNo) => handleSeat(index, date, vehicleNo)}
           isExpanded={expandedSeats[index]}
           item={item}
-          userBookedSeats={userBookedSeats[index] || []} // Pass only the relevant booked seats
+          userBookedSeats={userBookedSeats[index]?.seats || []}
+          userBookingId={userBookedSeats[index]?.bookingIds[0] || null}
           otherBookedSeats={otherBookedSeats}
           confirmedSeats={confirmedSeats}
-          setUserBookedSeats={setUserBookedSeats} // Pass down the setter
+          setUserBookedSeats={setUserBookedSeats}
         />
       ))}
     </>

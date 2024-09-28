@@ -39,6 +39,7 @@ function BookingPage() {
   const seatData = bookData.seatData || [];
   const price = bookData.price / seatData.length || 0;
   const phoneNumber = bookData.phoneNumber || "N/A";
+  const bookingId = bookData.bookingId || "N/A";
 
   const subtotal = seatData.length * price;
 
@@ -60,15 +61,16 @@ function BookingPage() {
           droppingTime: droppingTime,
           date: date,
           phoneNumber: phoneNumber,
+          bookingId: bookingId,
         }),
       });
       const data = await response.json();
       if (!response.ok) {
-        console.log("Network error occured");
+        console.log(response.statusText);
         return;
       }
       localStorage.removeItem("book");
-      navigate('/');
+      navigate("/");
       console.log(data);
     } catch (error) {
       console.error(error);

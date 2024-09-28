@@ -6,38 +6,51 @@ import { useNavigate } from "react-router-dom";
 
 function ExpandSeat({
   item,
-  userBookedSeats = [], // Ensure it's an array
+  userBookedSeats = [],
   otherBookedSeats,
   confirmedSeats,
   setUserBookedSeats,
+  userBookingId,
 }) {
   const navigate = useNavigate();
   const [bookedSeat, setBookedSeat] = useState([]);
 
   useEffect(() => {
+    console.log("User booking id is",userBookingId);
+  }, [userBookingId]);
+
+  useEffect(() => {
     const initialBookedSeats = JSON.parse(localStorage.getItem("seats")) || [];
-    const uniqueSeats = Array.from(new Set([...initialBookedSeats, ...userBookedSeats]));
+    const uniqueSeats = Array.from(
+      new Set([...initialBookedSeats, ...userBookedSeats])
+    );
     setBookedSeat(uniqueSeats);
   }, [userBookedSeats]);
 
   const { getUserData, userContact } = useAuth();
 
   const handleBooking = (seatName) => {
+
+    if(!userContact){
+      alert("Please login first");
+      navigate('/login');
+    }
     // Check if the seat is already booked by the user
     const isAlreadyBooked = bookedSeat.includes(seatName);
-    
+
     // Toggle the seat selection
-    setBookedSeat((prev) => 
-      isAlreadyBooked 
-      ? prev.filter(seat => seat !== seatName) // Remove seat if already booked
-      : [...prev, seatName] // Add seat if not booked
+    setBookedSeat(
+      (prev) =>
+        isAlreadyBooked
+          ? prev.filter((seat) => seat !== seatName) // Remove seat if already booked
+          : [...prev, seatName] // Add seat if not booked
     );
 
     // Update userBookedSeats in the parent component
     setUserBookedSeats((prevState) => ({
       ...prevState,
-      [item.index]: isAlreadyBooked 
-        ? (prevState[item.index] || []).filter(seat => seat !== seatName) // Remove from booked seats, ensure it is an array
+      [item.index]: isAlreadyBooked
+        ? (prevState[item.index] || []).filter((seat) => seat !== seatName) // Remove from booked seats, ensure it is an array
         : [...(prevState[item.index] || []), seatName], // Add to booked seats, ensure it is an array
     }));
   };
@@ -53,46 +66,70 @@ function ExpandSeat({
   }, [bookedSeat]);
 
   const handleBookFetch = () => {
-    localStorage.setItem("book", JSON.stringify({
-      seatType: "Adult",
-      seatData: bookedSeat,
-      price: bookedSeat.length * item.price,
-      vehicleNo: item.vehicleNo,
-      startLocation: item.startLocation,
-      departTime: item.departTime,
-      destination: item.destination,
-      droppingTime: item.droppingTime,
-      date: item.date,
-      phoneNumber: userContact,
-    }));
+    console.log(
+      JSON.stringify({
+        seatType: "Adult",
+        seatData: bookedSeat,
+        price: bookedSeat.length * item.price,
+        vehicleNo: item.vehicleNo,
+        startLocation: item.startLocation,
+        departTime: item.departTime,
+        destination: item.destination,
+        droppingTime: item.droppingTime,
+        date: item.date,
+        phoneNumber: userContact,
+        bookingId: userBookingId || null,
+      })
+    );
+    localStorage.setItem(
+      "book",
+      JSON.stringify({
+        seatType: "Adult",
+        seatData: bookedSeat,
+        price: bookedSeat.length * item.price,
+        vehicleNo: item.vehicleNo,
+        startLocation: item.startLocation,
+        departTime: item.departTime,
+        destination: item.destination,
+        droppingTime: item.droppingTime,
+        date: item.date,
+        phoneNumber: userContact,
+        bookingId: userBookingId || null,
+      })
+    );
     navigate("/bookingpage");
   };
 
   const renderSeatButton = (seatName) => {
     const isBooked = bookedSeat.includes(seatName);
-    const isUserBooked = Array.isArray(userBookedSeats) && userBookedSeats.includes(seatName);
-    const isOtherBooked = Array.isArray(otherBookedSeats) && otherBookedSeats.includes(seatName);
-    const isConfirmed = Array.isArray(confirmedSeats) && confirmedSeats.includes(seatName);
+    const isUserBooked =
+      Array.isArray(userBookedSeats) && userBookedSeats.includes(seatName);
+    const isOtherBooked =
+      Array.isArray(otherBookedSeats) && otherBookedSeats.includes(seatName);
+    const isConfirmed =
+      Array.isArray(confirmedSeats) && confirmedSeats.includes(seatName);
 
     let buttonStyle = {
       cursor: "pointer",
+      backgroundColor: isBooked ? "lightcoral" : "white",
+      color: isBooked || isUserBooked ? "white" : "black",
     };
-    
+
     if (isConfirmed) {
       buttonStyle = {
-        backgroundColor: "red",
+        backgroundColor: "#d3d3d3",
         color: "white",
         cursor: "not-allowed",
       };
     } else if (isOtherBooked) {
       buttonStyle = {
-        backgroundColor: "blue",
+        backgroundColor: "#544be5",
         color: "white",
         cursor: "not-allowed",
       };
     } else if (isUserBooked || isBooked) {
       buttonStyle = {
-        backgroundColor: "lightcoral", // Change color when booked
+        backgroundColor: "lightcoral", 
         color: "white",
       };
     }
@@ -100,8 +137,12 @@ function ExpandSeat({
     return (
       <button
         key={seatName}
-        className={`seat-button ${isUserBooked ? "user-booked" : isOtherBooked ? "other-booked" : ""}`}
-        onClick={isConfirmed || isOtherBooked ? null : () => handleBooking(seatName)}
+        className={`seat-button ${
+          isUserBooked ? "user-booked" : isOtherBooked ? "other-booked" : ""
+        }`}
+        onClick={
+          isConfirmed || isOtherBooked ? null : () => handleBooking(seatName)
+        }
         style={buttonStyle}
       >
         {seatName}
@@ -115,9 +156,7 @@ function ExpandSeat({
         <div className="wheel">
           <img src={steering} alt="Steering Wheel" />
         </div>
-        <div className="single-seat">
-          {["A1", "C1"].map(renderSeatButton)}
-        </div>
+        <div className="single-seat">{["A1", "C1"].map(renderSeatButton)}</div>
         <div className="single-seat">
           {["A2", "B1", "C2"].map(renderSeatButton)}
         </div>
@@ -133,7 +172,7 @@ function ExpandSeat({
           {bookedSeat.length > 0 && (
             <thead>
               <tr>
-                <th>Seat Type</th>
+                <th>Type</th>
                 <th>Seat</th>
                 <th>Price</th>
                 <th>Action</th>
@@ -141,19 +180,26 @@ function ExpandSeat({
             </thead>
           )}
           <tbody>
-            {/* Display user booked and currently selected seats */}
-            {[...new Set([...userBookedSeats, ...bookedSeat])].map((seat, index) => (
-              <tr key={index}>
-                <td>Adult</td>
-                <td>{seat}</td>
-                <td>{item.price}</td>
-                <td>
-                  <button className="del-seat" onClick={() => handleBooking(seat)}>
-                    {bookedSeat.includes(seat) ? "Remove" : "Add"}
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {/* Filter out seats that are not booked anymore */}
+            {[...new Set([...userBookedSeats, ...bookedSeat])]
+              .filter((seat) => bookedSeat.includes(seat))
+              .map((seat, index) => (
+                <tr key={index}>
+                  <td>Adult</td>
+                  <td>{seat}</td>
+                  <td>{item.price}</td>
+                  <td>
+                    <button
+                      className="del-seat"
+                      onClick={() => {
+                        handleBooking(seat); // This will update bookedSeat and remove the seat from the table
+                      }}
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         {bookedSeat.length >= 1 && (

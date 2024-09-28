@@ -61,8 +61,20 @@ function NavBar() {
                 <></>
               ) : (
                 <>
-                  <li>Offers</li>
-                  <li>Bookings</li>
+                  {isAdmin ? (
+                    <></>
+                  ) : (
+                    <>
+                      {userData ? (
+                        <Link to="/profile">
+                          {" "}
+                          <li>Profile</li>
+                        </Link>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  )}
                 </>
               )}
               {userData ? (
@@ -105,8 +117,14 @@ function NavBar() {
                   <></>
                 ) : (
                   <>
-                    <li>Offers</li>
-                    <li>Bookings</li>
+                    {userData ? (
+                      <Link to="/profile">
+                        {" "}
+                        <li>Profile</li>
+                      </Link>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 )}
                 {userData ? (

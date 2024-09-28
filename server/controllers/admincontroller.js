@@ -47,6 +47,7 @@ const getTravel = async (req, res) => {
 };
 
 const seatBooker = async (req, res) => {
+  console.log(req.body);
   try {
     const {
       seatType,
@@ -59,26 +60,67 @@ const seatBooker = async (req, res) => {
       droppingTime,
       date,
       phoneNumber,
+      availableSeats,
+      bookingId, // Extract bookingId properly
     } = req.body;
+
     console.log(req.body);
 
-    const newEntry = await bookModel.create({
-      seatType,
-      seatData,
-      price,
-      vehicleNo,
-      startLocation,
-      departTime,
-      destination,
-      droppingTime,
-      date,
-      phoneNumber,
-    });
+    // Check if bookingId is valid
+    if (bookingId && bookingId !== "N/A") {
+      // Proceed with updating the existing booking
+      const updatedEntry = await bookModel.findByIdAndUpdate(
+        bookingId, // This should now be a valid string
+        {
+          seatType,
+          seatData,
+          price,
+          vehicleNo,
+          startLocation,
+          departTime,
+          destination,
+          droppingTime,
+          date,
+          phoneNumber,
+          availableSeats,
+        },
+        { new: true }
+      );
 
-    return res.status(202).json({ msg: "Successfully booked" });
+      if (updatedEntry) {
+        return res.status(200).json({ msg: "Successfully updated booking" });
+      } else {
+        return res.status(404).json({ msg: "Booking not found" });
+      }
+    } else if (bookingId === "N/A") {
+      // Handle the N/A case
+      console.log("Booking ID is N/A, creating a new booking...");
+      // Create a new booking if bookingId is N/A
+      const newEntry = await bookModel.create({
+        seatType,
+        seatData,
+        price,
+        vehicleNo,
+        startLocation,
+        departTime,
+        destination,
+        droppingTime,
+        date,
+        phoneNumber,
+        availableSeats,
+      });
+
+      return res
+        .status(201)
+        .json({ msg: "Successfully booked", bookingId: newEntry._id });
+    } else {
+      // If bookingId is not provided at all
+      console.log("Booking ID is not provided.");
+      return res.status(400).json({ msg: "Booking ID is required." });
+    }
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ mssg: "Network error occured" });
+    return res.status(400).json({ msg: "Network error occurred" });
   }
 };
 
@@ -243,6 +285,25 @@ const sendBookData = async (req, res) => {
   }
 };
 
+const getUserSeat = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    console.log(phoneNumber);
+
+    const confirmSeat = await confirmModel.find({phoneNumber});
+    console.log(confirmSeat);
+
+    if (!confirmSeat) {
+      console.log("No data found")
+      return res.status(404).json({ msg: "No such data has been found" });
+    }
+
+    return res.status(200).json(confirmSeat);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   dateFixer,
   getTravel,
@@ -254,4 +315,5 @@ module.exports = {
   deleteBook,
   getAllData,
   sendBookData,
+  getUserSeat,
 };

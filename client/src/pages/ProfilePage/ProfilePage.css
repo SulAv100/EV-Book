@@ -1,0 +1,188 @@
+
+.profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Profile Header */
+  .profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .profile-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  /* Profile Info */
+  .profile-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+  }
+  
+  .profile-info h2 {
+    font-size: 1.8rem;
+    color: #222;
+  }
+  
+  .profile-info p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  /* Booking History */
+  .booking-history {
+    margin-bottom: 40px;
+  }
+  
+  .booking-history h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .booking-history table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .booking-history th, .booking-history td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.1rem;
+  }
+  
+  .booking-history th {
+    background-color: #495057; /* Neutral dark gray */
+    color: white;
+  }
+  
+  .booking-history tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .booking-history tr:hover {
+    background-color: #d1e7fd;
+  }
+  
+  /* Password Change Section */
+  .password-change {
+    background-color: #f8f9fc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .password-change h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Password Change Form */
+  .password-change form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .password-change label {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .password-change input {
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .password-change input:focus {
+    border-color: #17a2b8; /* Subtle blue */
+    outline: none;
+    box-shadow: 0 0 5px rgba(23, 162, 184, 0.5);
+  }
+  
+  /* Password Change Button */
+  .password-change button {
+    padding: 15px;
+    background-color: #17a2b8; /* Soft cyan */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+  }
+  
+  .password-change button:hover {
+    background-color: #138496;
+  }
+  
+  .password-change button:active {
+    transform: scale(0.98);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .profile-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .profile-info h2, .profile-info p {
+      text-align: center;
+      width: 100%;
+    }
+  
+    .profile-container {
+      padding: 20px;
+    }
+  
+    .password-change button {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-header h1 {
+      font-size: 2rem;
+    }
+  
+    .profile-info h2 {
+      font-size: 1.5rem;
+    }
+  
+    .booking-history th, .booking-history td {
+      padding: 8px 10px;
+      font-size: 0.9rem;
+    }
+  
+    .password-change h3 {
+      font-size: 1.4rem;
+    }
+  }

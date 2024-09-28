@@ -14,6 +14,7 @@ import BookSeat from "./components/Admin/BookSeat/BookSeat";
 import BookingPage from "./pages/Payment/BookingPage";
 import DisplayTravel from "./components/Admin/DisplayTravel/DisplayTravel";
 import ConfirmBook from "./components/Admin/ConfirmBook/ConfirmBook";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 function App() {
   const { getAdminData, isAdmin } = useAuth();
   useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/bookingpage" element={<BookingPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/adminLogin" element={<AdminLogin />} />
 
           {/* Admin Routes */}
