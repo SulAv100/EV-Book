@@ -2,6 +2,7 @@ const dateModel = require("../models/date-model.js");
 const bookModel = require("../models/booking-model.js");
 const confirmModel = require("../models/confirm-model.js");
 const userModel = require("../models/user-model.js");
+const completeModel = require("../models/completed-model.js");
 
 const dateFixer = async (req, res) => {
   try {
@@ -127,21 +128,53 @@ const seatBooker = async (req, res) => {
 const deleteTravel = async (req, res) => {
   try {
     const { travelId } = req.body;
-    console.log(travelId);
+    
+    // Validate travelId existence
     if (!travelId) {
-      return res.status(404).json({ msg: "Invalid Operation" });
+      return res.status(400).json({ msg: "Invalid Operation: travelId is required" });
     }
+    
+    // Fetch the travel data
+    const travelFetch = await dateModel.findById(travelId);
+    
+    // Check if travel data exists
+    if (!travelFetch) {
+      return res.status(404).json({ msg: "Data no longer available" });
+    }
+    
+    // Log the fetched travel data
+    console.log("Travel Data:", travelFetch);
+    
+    const { vehicleNo, date, startLocation, destination } = travelFetch;
+    
+    // Create new data in the completeModel
+    const newData = await completeModel.create({
+      vehicleNo,
+      date,
+      startLocation,
+      destination,
+    });
+
+    // Log the newly created data for debugging (optional)
+    console.log("New Data created:", newData);
+    
+    // Delete the travel data from dateModel
     const travelData = await dateModel.findByIdAndDelete(travelId);
-
+    
+    // Check if travel data was deleted
     if (!travelData) {
-      return res.status(404).json({ msg: "Didnt found any travel data" });
+      return res.status(404).json({ msg: "No travel data found to delete" });
     }
-
-    return res.status(200).json({ msg: "Successfully done" });
+    
+    // Return success response
+    return res.status(200).json({ msg: "Successfully deleted travel and created new entry" });
+    
   } catch (error) {
-    return res.status(500).json({ msg: "Internal Server Error occured" });
+    console.error("Error in deleteTravel:", error); // Log error for debugging
+    return res.status(500).json({ msg: "Internal Server Error occurred" });
   }
 };
+
 
 const bookData = async (req, res) => {
   try {
@@ -290,11 +323,11 @@ const getUserSeat = async (req, res) => {
     const { phoneNumber } = req.body;
     console.log(phoneNumber);
 
-    const confirmSeat = await confirmModel.find({phoneNumber});
+    const confirmSeat = await confirmModel.find({ phoneNumber });
     console.log(confirmSeat);
 
     if (!confirmSeat) {
-      console.log("No data found")
+      console.log("No data found");
       return res.status(404).json({ msg: "No such data has been found" });
     }
 

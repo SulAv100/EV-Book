@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/authContext";
 const ProfilePage = () => {
   // State for password change form
   const [passwords, setPasswords] = useState({
-    currentPassword: "",
+    password: "",
     newPassword: "",
     confirmNewPassword: "",
   });
@@ -24,13 +24,16 @@ const ProfilePage = () => {
   // Fetch confirmed bookings based on user contact
   const getConfirmedBooks = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/admin/getUserSeat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phoneNumber }), // Send userNumber
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/admin/getUserSeat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ phoneNumber }), // Send userNumber
+        }
+      );
 
       const data = await response.json();
       if (!response.ok) {
@@ -46,7 +49,8 @@ const ProfilePage = () => {
 
   // Fetch confirmed bookings when userContact changes
   useEffect(() => {
-    if (phoneNumber) { // Ensure userNumber is available before fetching
+    if (phoneNumber) {
+      // Ensure userNumber is available before fetching
       getConfirmedBooks();
     }
   }, [phoneNumber]);
@@ -54,6 +58,37 @@ const ProfilePage = () => {
   // Handle password change input
   const handlePasswordChange = (e) => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
+  };
+
+  const changePassword = async (event) => {
+    event.preventDefault();
+
+    if (passwords.newPassword === passwords.confirmNewPassword) {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/auth/changePassword",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ phoneNumber, passwords }),
+          }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          console.log("Network error occured");
+          return;
+        } else {
+          console.log(data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }else{
+      alert("Incorrect password");
+      return;
+    }
   };
 
   return (
@@ -85,7 +120,7 @@ const ProfilePage = () => {
                 <td>{index + 1}</td>
                 <td>{booking.date}</td>
                 <td>{`${booking.startLocation} to ${booking.destination}`}</td>
-                <td>{booking.seatData.join(', ')}</td> {/* Join seatData array for display */}
+                <td>{booking.seatData.join(", ")}</td>
                 <td>{booking.vehicleNo}</td>
               </tr>
             ))}
@@ -95,13 +130,13 @@ const ProfilePage = () => {
 
       <div className="password-change">
         <h3>Change Password</h3>
-        <form>
+        <form onSubmit={changePassword}>
           <div>
             <label>Current Password</label>
             <input
               type="password"
-              name="currentPassword"
-              value={passwords.currentPassword}
+              name="password"
+              value={passwords.password}
               onChange={handlePasswordChange}
               required
             />

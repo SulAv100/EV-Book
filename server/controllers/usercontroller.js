@@ -95,7 +95,7 @@ const logout = async (req, res) => {
 const adminLogin = async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
-    
+
     const verifyNumber = await adminModel.findOne({ phoneNumber });
 
     if (!verifyNumber) {
@@ -131,14 +131,13 @@ const getAdminProfile = async (req, res) => {
   }
 };
 
-
 const adminLogout = async (req, res) => {
   try {
     return res
       .cookie("adminToken", "", {
         httpOnly: true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV = "production",
+        secure: (process.env.NODE_ENV = "production"),
         expires: new Date(0),
       })
       .json({ msg: "Successfully logged out" });
@@ -146,6 +145,40 @@ const adminLogout = async (req, res) => {
     return res.status(500).json({ msg: "Server error occured" });
   }
 };
+
+
+
+const changePassword = async (req, res) => {
+  try {
+    const { phoneNumber, passwords } = req.body;
+    const { password, newPassword, confirmNewPassword } = passwords;
+
+    const user = await userModel.findOne({ phoneNumber });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect." });
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: "New passwords do not match." });
+    }
+
+    user.password = newPassword; 
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error." });
+  }
+};
+
+
+
 module.exports = {
   register,
   login,
@@ -153,5 +186,6 @@ module.exports = {
   logout,
   adminLogin,
   getAdminProfile,
-  adminLogout
+  adminLogout,
+  changePassword,
 };

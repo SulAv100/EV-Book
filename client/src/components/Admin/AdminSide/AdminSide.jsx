@@ -39,6 +39,8 @@ function AdminSide() {
     { path: "/admin/bookData", icon: "fa-book", label: "Seat Booking" },
     { path: "/admin/displayTravel", icon: "fa-book", label: "Display Travel" },
     { path: "/admin/confirmBook", icon: "fa-book", label: "Confirm Booking" },
+    { path: "/admin/finishTravel", icon: "fa-book", label: "Finished Travel" },
+
   ];
 
   return (

@@ -27,6 +27,8 @@ function Hero() {
     }
   }, [isAdmin, navigate]); // Trigger navigation after `isAdmin` updates
 
+ 
+
   return (
     <>
       <div className="background-image">

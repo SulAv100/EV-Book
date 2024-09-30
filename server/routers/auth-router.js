@@ -11,5 +11,6 @@ router.route('/adminData').get(adminMiddleware,authController.getAdminProfile);
 router.route('/logout').post(authController.logout);
 router.route('/adminLogout').post(authController.adminLogout);
 router.route('/adminLogin').post(authController.adminLogin);
+router.route('/changePassword').post(authController.changePassword);
 
 module.exports = router;

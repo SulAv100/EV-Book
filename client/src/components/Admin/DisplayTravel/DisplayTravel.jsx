@@ -12,9 +12,9 @@ function DisplayTravel() {
   const handleDelete = async (travelId) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/admin/setTravel",
+        "http://localhost:3000/api/admin/removeTravel",
         {
-          method: "DELETE",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
