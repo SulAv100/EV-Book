@@ -128,25 +128,27 @@ const seatBooker = async (req, res) => {
 const deleteTravel = async (req, res) => {
   try {
     const { travelId } = req.body;
-    
+
     // Validate travelId existence
     if (!travelId) {
-      return res.status(400).json({ msg: "Invalid Operation: travelId is required" });
+      return res
+        .status(400)
+        .json({ msg: "Invalid Operation: travelId is required" });
     }
-    
+
     // Fetch the travel data
     const travelFetch = await dateModel.findById(travelId);
-    
+
     // Check if travel data exists
     if (!travelFetch) {
       return res.status(404).json({ msg: "Data no longer available" });
     }
-    
+
     // Log the fetched travel data
     console.log("Travel Data:", travelFetch);
-    
+
     const { vehicleNo, date, startLocation, destination } = travelFetch;
-    
+
     // Create new data in the completeModel
     const newData = await completeModel.create({
       vehicleNo,
@@ -157,24 +159,24 @@ const deleteTravel = async (req, res) => {
 
     // Log the newly created data for debugging (optional)
     console.log("New Data created:", newData);
-    
+
     // Delete the travel data from dateModel
     const travelData = await dateModel.findByIdAndDelete(travelId);
-    
+
     // Check if travel data was deleted
     if (!travelData) {
       return res.status(404).json({ msg: "No travel data found to delete" });
     }
-    
+
     // Return success response
-    return res.status(200).json({ msg: "Successfully deleted travel and created new entry" });
-    
+    return res
+      .status(200)
+      .json({ msg: "Successfully deleted travel and created new entry" });
   } catch (error) {
     console.error("Error in deleteTravel:", error); // Log error for debugging
     return res.status(500).json({ msg: "Internal Server Error occurred" });
   }
 };
-
 
 const bookData = async (req, res) => {
   try {
@@ -337,6 +339,18 @@ const getUserSeat = async (req, res) => {
   }
 };
 
+const getCompleteTravel = async (req, res) => {
+  try {
+    const completeData = await completeModel.find();
+    if (!completeData) {
+      return res.status(404).json({ msg: "No travel data" });
+    }
+    return res.status(202).json(completeData);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   dateFixer,
   getTravel,
@@ -349,4 +363,5 @@ module.exports = {
   getAllData,
   sendBookData,
   getUserSeat,
+  getCompleteTravel,
 };

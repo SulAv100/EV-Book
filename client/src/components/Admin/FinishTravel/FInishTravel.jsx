@@ -1,29 +1,35 @@
-import React,{useState, useEffect} from 'react';
-import './FinishTravel.css'; 
+import React, { useState, useEffect } from "react";
+import "./FinishTravel.css";
 
 function FinishTravel() {
-  const travelHistory = [
-    { sn: 1, busNo: 'B123', date: '2024-09-01', route: 'A to B' },
-    { sn: 2, busNo: 'B456', date: '2024-09-05', route: 'B to C' },
-    { sn: 3, busNo: 'B789', date: '2024-09-09', route: 'C to D' }
-  ];
+  const [travelHistory, setTravelHistory] = useState([]);
 
-  const fetchCompletedTravel = async ()=>{
-    try{
-      const response = await fetch("http://localhost:3000/api/auth/removeTravel",{
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json'
+  const fetchCompletedTravel = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/admin/removeTravel",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      })
-    }catch(error){
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return console.log("An error has occurred");
+      }
+
+      // Update the travelHistory state with fetched data
+      setTravelHistory(data);
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchCompletedTravel();
-  },[])
+  }, []);
 
   return (
     <div className="travel-container">
@@ -39,11 +45,11 @@ function FinishTravel() {
         </thead>
         <tbody>
           {travelHistory.map((travel, index) => (
-            <tr key={index}>
-              <td>{travel.sn}</td>
-              <td>{travel.busNo}</td>
-              <td>{travel.date}</td>
-              <td>{travel.route}</td>
+            <tr key={travel._id || index}>
+              <td>{index + 1}</td>
+              <td>{travel.vehicleNo}</td>
+              <td>{new Date(travel.date).toLocaleDateString()}</td>
+              <td>{`${travel.startLocation} to ${travel.destination}`}</td>
             </tr>
           ))}
         </tbody>

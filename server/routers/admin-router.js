@@ -7,7 +7,7 @@ router
   .post(adminController.dateFixer)
   .get(adminController.getTravel);
 
-router.route("/removeTravel").post(adminController.deleteTravel);
+router.route("/removeTravel").post(adminController.deleteTravel).get(adminController.getCompleteTravel);
 router
   .route("/bookSeat")
   .post(adminController.seatBooker)

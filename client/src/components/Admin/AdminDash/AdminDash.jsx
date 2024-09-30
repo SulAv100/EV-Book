@@ -4,6 +4,7 @@ import "./AdminDash.css";
 function AdminDash() {
   const [dashData, setDashData] = useState({});
   const [bookings, setBookings] = useState([]);
+  const [travel, setTravel] = useState();
 
   const fetchDashData = async () => {
     try {
@@ -26,6 +27,31 @@ function AdminDash() {
       console.error(error);
     }
   };
+
+  const fetchCompletedTravel = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/admin/removeTravel",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return console.log("An error has occurred");
+      }
+      setTravel(data.length);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompletedTravel();
+  }, []);
 
   useEffect(() => {
     fetchDashData();
@@ -66,7 +92,7 @@ function AdminDash() {
           <div className="single-dash">
             <span className="left-single">
               <p>Total Trips</p>
-              <h2>100</h2>
+              <h2>{travel}</h2>
             </span>
             <i class="fa-solid fa-road"></i>
           </div>

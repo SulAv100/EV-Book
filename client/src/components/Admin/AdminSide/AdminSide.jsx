@@ -30,17 +30,32 @@ function AdminSide() {
   };
 
   const menuItems = [
-    { path: "/admin", icon: "fa-house", label: "Dashboard" },
+    { path: "/admin", icon: "fa-solid fa-house", label: "Dashboard" }, // Home dashboard
     {
       path: "/admin/travelAdmin",
-      icon: "fa-calendar-days",
-      label: "Date Manager",
+      icon: "fa-solid fa-calendar-days",
+      label: "Date Manager", // Calendar for managing dates
     },
-    { path: "/admin/bookData", icon: "fa-book", label: "Seat Booking" },
-    { path: "/admin/displayTravel", icon: "fa-book", label: "Display Travel" },
-    { path: "/admin/confirmBook", icon: "fa-book", label: "Confirm Booking" },
-    { path: "/admin/finishTravel", icon: "fa-book", label: "Finished Travel" },
-
+    {
+      path: "/admin/bookData",
+      icon: "fa-solid fa-chair",
+      label: "Seat Booking", // Seat or chair for booking seats
+    },
+    {
+      path: "/admin/displayTravel",
+      icon: "fa-solid fa-route",
+      label: "Display Travel", // Route to display travel plans
+    },
+    {
+      path: "/admin/confirmBook",
+      icon: "fa-solid fa-check-circle",
+      label: "Confirm Booking", // Checkmark for confirmation
+    },
+    {
+      path: "/admin/finishTravel",
+      icon: "fa-solid fa-flag-checkered",
+      label: "Finished Travel", // Flag for completed travel
+    },
   ];
 
   return (
