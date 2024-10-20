@@ -3,10 +3,10 @@ import "./DisplayTravel.css";
 import { useAuth } from "../../../hooks/authContext";
 
 function DisplayTravel() {
-  const { fetchTravel, fetchData } = useAuth();
+  const { fetchAllTravel, fetchAllData } = useAuth();
 
   useEffect(() => {
-    fetchTravel();
+    fetchAllTravel();
   }, []);
 
   const handleDelete = async (travelId) => {
@@ -40,7 +40,7 @@ function DisplayTravel() {
     <div className="display-travel">
       <h1>Travel Information</h1>
       <table className="travel-table">
-        {!fetchData?.length == 0 ? (
+        {!fetchAllData?.length == 0 ? (
           <>
             <thead>
               <tr>
@@ -59,7 +59,7 @@ function DisplayTravel() {
           </>
         )}
         <tbody>
-          {fetchData.map((data, index) => (
+          {fetchAllData.map((data, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{data.vehicleNo}</td>

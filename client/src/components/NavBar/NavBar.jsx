@@ -3,9 +3,10 @@ import "./NavBar.css";
 import Logo from "../../assets/logo.jpg";
 import { useAuth } from "../../hooks/authContext";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function NavBar() {
+  const navigate = useNavigate();
   const { getUserData, userData, getAdminData, isAdmin } = useAuth();
 
   useEffect(() => {
@@ -31,6 +32,7 @@ function NavBar() {
       const data = await response.json();
       if (response.ok) {
         console.log(data.msg);
+        navigate("/");
         window.location.reload();
         return;
       }

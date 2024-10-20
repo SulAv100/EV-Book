@@ -40,7 +40,38 @@ const dateFixer = async (req, res) => {
 
 const getTravel = async (req, res) => {
   try {
-    const collectData = await dateModel.find({});
+    // console.log(req.body);
+    const { startLocation, destination, date } = req.body;
+
+    const collectData = await dateModel.find({
+      startLocation: startLocation,
+      destination: destination,
+      date: date,
+    });
+
+    if (!collectData) {
+      console.log("No data found");
+      return res.status(404).json({ msg: "No tarvel data found for this" });
+    }
+
+    console.log("Yo hai", collectData);
+    return res.status(200).json(collectData);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const getAllTravel = async (req, res) => {
+  try {
+    const collectData = await dateModel.find();
+    console.log("Data is ", collectData);
+
+    if (!collectData) {
+      console.log("No data found");
+      return res.status(404).json({ msg: "No tarvel data found for this" });
+    }
+
+    console.log(collectData);
     return res.status(200).json(collectData);
   } catch (error) {
     console.error(error);
@@ -286,6 +317,7 @@ const getAllData = async (req, res) => {
 
 const sendBookData = async (req, res) => {
   try {
+    console.log(req.body);
     const { date, vehicleNo, userContact } = req.body;
 
     let userBooked = await bookModel.find({
@@ -351,6 +383,42 @@ const getCompleteTravel = async (req, res) => {
   }
 };
 
+const checkExpireRide = async (req, res) => {
+  try {
+    const { todayDate, currentTime } = req.body;
+    console.log("Today's date:", todayDate, "Current time:", currentTime);
+
+    const availableRides = await dateModel.find({ date: todayDate });
+    if (availableRides.length < 1) {
+      console.log("No rides available for today.");
+      return;
+    }
+
+    for (const ride of availableRides) {
+      const { vehicleNo, startLocation, destination, date, departureTime } =
+        ride;
+
+      if (currentTime > departureTime) {
+        await completeModel.create({
+          vehicleNo,
+          date,
+          startLocation,
+          destination,
+        });
+
+        console.log(`Ride ${vehicleNo} moved to completeModel.`);
+      } else {
+        console.log(`Ride ${vehicleNo} has not expired yet.`);
+      }
+    }
+
+    res.send("Rides processed successfully.");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred.");
+  }
+};
+
 module.exports = {
   dateFixer,
   getTravel,
@@ -364,4 +432,6 @@ module.exports = {
   sendBookData,
   getUserSeat,
   getCompleteTravel,
+  getAllTravel,
+  checkExpireRide,
 };

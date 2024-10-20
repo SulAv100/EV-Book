@@ -99,30 +99,43 @@ function AdminDash() {
         </div>
         <section className="table-container">
           <h2 className="book-table">Recent Bookings</h2>
-          <table className="bookings-table">
-            <thead>
-              <tr>
-                <th>S.N</th>
-                <th>Phone Number</th>
-                <th>Bus No</th>
-                <th>Seat Booked</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings.map((booking, index) => (
-                <tr key={booking._id}>
-                  <td>{index + 1}</td>
-                  <td>{booking.phoneNumber}</td>
-                  <td>{booking.vehicleNo}</td>
-                  <td>
-                    {booking && booking.seatData
-                      ? booking.seatData.length
-                      : "N/A"}
-                  </td>
+          {bookings?.length < 1 ? (
+            <>
+              <h1
+                style={{
+                  textAlign: "center",
+                  fontSize: "24px",
+                }}
+              >
+                No data is available right now
+              </h1>
+            </>
+          ) : (
+            <table className="bookings-table">
+              <thead>
+                <tr>
+                  <th>S.N</th>
+                  <th>Phone Number</th>
+                  <th>Bus No</th>
+                  <th>Seat Booked</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {bookings.map((booking, index) => (
+                  <tr key={booking._id}>
+                    <td>{index + 1}</td>
+                    <td>{booking.phoneNumber}</td>
+                    <td>{booking.vehicleNo}</td>
+                    <td>
+                      {booking && booking.seatData
+                        ? booking.seatData.length
+                        : "N/A"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </section>
       </section>
     </>

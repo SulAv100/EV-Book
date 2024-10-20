@@ -152,6 +152,7 @@ header {
     display: none;
     font-size: 24px;
     cursor: pointer;
+    padding: 20px;
   }
   
   /* Hide navigation items on small screens and show hamburger menu */

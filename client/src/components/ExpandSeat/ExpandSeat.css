@@ -15,9 +15,10 @@
   border-radius: 10px;
 }
 .wheel{
-  height: 30px;
-  width: 30px;
-  padding: 5px;
+  height: 40px;
+  width: 40px;
+  padding: 0px 20px;
+  float: right;
 }
 .wheel img{
   height: 100%;

@@ -83,48 +83,59 @@ function BookSeat() {
       console.error(error);
     }
   };
- 
 
   return (
     <div className="book-seat">
       <h2>Booked Seats</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Sn</th>
-            <th>Phone Number</th>
-            <th>Bus Number</th>
-            <th>Date</th>
-            <th>Booked Seats</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.map((booking, index) => (
-            <tr key={booking._id}>
-              <td>{index + 1}</td>
-              <td>{booking.phoneNumber}</td>
-              <td>{booking.vehicleNo}</td>
-              <td>{booking.date}</td>
-              <td>{booking.seatData.join(",")}</td>
-              <td>
-                <button
-                  className="confirm"
-                  onClick={() => handleConfirm(booking)}
-                >
-                  Confirm
-                </button>
-                <button
-                  className="delete"
-                  onClick={() => handleDelete(booking._id)}
-                >
-                  Delete
-                </button>
-              </td>
+      {bookings?.length < 1 ? (
+        <>
+          <h1
+            style={{
+              textAlign: "center",
+            }}
+          >
+            No data available
+          </h1>
+        </>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Sn</th>
+              <th>Phone Number</th>
+              <th>Bus Number</th>
+              <th>Date</th>
+              <th>Booked Seats</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bookings.map((booking, index) => (
+              <tr key={booking._id}>
+                <td>{index + 1}</td>
+                <td>{booking.phoneNumber}</td>
+                <td>{booking.vehicleNo}</td>
+                <td>{booking.date}</td>
+                <td>{booking.seatData.join(",")}</td>
+                <td>
+                  <button
+                    className="confirm"
+                    onClick={() => handleConfirm(booking)}
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    className="delete"
+                    onClick={() => handleDelete(booking._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

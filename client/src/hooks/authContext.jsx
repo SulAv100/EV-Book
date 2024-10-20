@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userContact, setUserContact] = useState("");
   const [fetchData, setFetchData] = useState([]);
+  const [fetchAllData, setFetchAllData] = useState([]);
 
   // Fetch user data
   const getUserData = async () => {
@@ -53,21 +54,51 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Fetch travel data
-  const fetchTravel = async () => {
+  const fetchTravel = async (formData) => {
+    console.log(formData);
     try {
-      const response = await fetch("http://localhost:3000/api/admin/setTravel", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/admin/getTravelData",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
       if (!response.ok) {
         console.log("An unexpected error occurred");
         return;
       }
+      console.log(data);
       setFetchData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchAllTravel = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/admin/setTravel",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log("An unexpected error occurred");
+        return;
+      }
+      console.log(data);
+      setFetchAllData(data);
     } catch (error) {
       console.error(error);
     }
@@ -79,9 +110,11 @@ export const AuthProvider = ({ children }) => {
         getUserData,
         userData,
         setIsAdmin,
-        userContact, // Provide userContact
+        userContact,
         userDetail,
         getAdminData,
+        fetchAllData,
+        fetchAllTravel,
         isAdmin,
         fetchTravel,
         fetchData,

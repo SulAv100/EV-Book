@@ -1,0 +1,155 @@
+
+
+
+ 
+.question{
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: fit-content;
+    
+}
+
+.question-container{
+    
+    min-height: 800px;
+    max-height: fit-content;
+    width: 1000px;
+  
+    padding: 60px 60px 60px 60px;
+ 
+  
+    
+}
+
+.faq{
+   
+    text-align: center;
+    font-size: 35px;
+    font-weight: 700;
+    height: 45px;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    margin-bottom: 20px;
+}
+.one{
+  max-height: fit-content;
+  
+
+  padding: 2px;
+  
+  
+  
+  
+}
+
+.show-div{
+ 
+
+display: flex;
+flex-direction: row;
+align-items: center;
+
+
+
+   font-family:  sans-serif;
+    height: 96px;
+    
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-top: none;
+    cursor: pointer; 
+    padding: 0px 30px 0px 30px;
+   
+  
+
+ 
+}
+.hide-div{
+  background-color: #fafafa;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  padding-left: 50px;
+  
+  max-height: 0;
+  text-decoration: none solid rgb(58,58,58);
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+
+}
+.hide-div.open {
+  max-height: 150px; 
+
+  font-size: 16px;
+ font-weight: 700;
+ text-decoration: none solid rgb(58,58,58);
+ 
+  opacity: 1;
+}
+
+.show-div p{
+  color: #3a3a3a ;
+  font-size: 16px;
+
+  font-weight: 700;
+  
+}
+.toggle-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  margin-right: 10px;
+  font-size: 1.5em;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+}
+
+.toggle-button:focus {
+  outline: none;
+}
+
+
+@media screen and (max-width: 830px) {
+  .detail {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    
+  }
+  .help h1 {
+    font-size: 2rem;
+}
+
+.help h5 {
+    font-size: 1.25rem;
+}
+
+.box {
+    width: 90%;
+    margin-top: 40px;
+}
+.faq{
+  margin-bottom: 70px;
+}
+
+.semi-mail, .question-container {
+    width: 100%;
+    padding: 20px;
+}
+
+}
+
+@media screen and (max-width: 600px){
+  .faq{
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  .button{
+    width: 100%;
+    padding: 10px;
+  }
+}

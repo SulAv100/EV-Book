@@ -26,7 +26,7 @@ const TripCard = ({
         <div className="left-book">
           <div className="destination">
             <div className="start-point">
-              <span>5:00 PM</span>
+              <span>{item.departTime}</span>
               <span>{item.startLocation}</span>
             </div>
             <div className="time-lapse">
@@ -34,7 +34,7 @@ const TripCard = ({
               <span>-----------------------------------------------</span>
             </div>
             <div className="start-point">
-              <span>12:00 PM</span>
+              <span>{item.droppingTime}</span>
               <span>{item.destination}</span>
             </div>
           </div>
@@ -84,9 +84,9 @@ const TripCard = ({
   );
 };
 
-function Book() {
+function Book({ formData }) {
   const [expandedSeats, setExpandedSeats] = useState([]);
-  const [userBookedSeats, setUserBookedSeats] = useState({}); // This stores seat data per trip
+  const [userBookedSeats, setUserBookedSeats] = useState({});
   const [otherBookedSeats, setOtherBookedSeats] = useState([]);
   const [confirmedSeats, setConfirmedSeats] = useState([]);
   const { fetchTravel, fetchData, userContact, getUserData } = useAuth();
@@ -94,6 +94,12 @@ function Book() {
   useEffect(() => {
     getUserData();
   }, []);
+
+  useEffect(() => {
+    if (formData) {
+      console.log(formData);
+    }
+  }, [formData]);
 
   useEffect(() => {
     if (fetchData && fetchData.length > 0) {
@@ -127,7 +133,7 @@ function Book() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ date, vehicleNo, userContact }),
+          body: JSON.stringify({ formData, date, vehicleNo, userContact }),
         }
       );
 

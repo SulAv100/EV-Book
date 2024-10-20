@@ -16,8 +16,14 @@ function ExpandSeat({
   const [bookedSeat, setBookedSeat] = useState([]);
 
   useEffect(() => {
-    console.log("User booking id is",userBookingId);
+    console.log("User booking id is", userBookingId);
   }, [userBookingId]);
+
+  useEffect(() => {
+    if (item) {
+      console.log(item.availableSeats, "YO hai seats");
+    }
+  }, [item]);
 
   useEffect(() => {
     const initialBookedSeats = JSON.parse(localStorage.getItem("seats")) || [];
@@ -30,10 +36,9 @@ function ExpandSeat({
   const { getUserData, userContact } = useAuth();
 
   const handleBooking = (seatName) => {
-
-    if(!userContact){
+    if (!userContact) {
       alert("Please login first");
-      navigate('/login');
+      navigate("/login");
     }
     // Check if the seat is already booked by the user
     const isAlreadyBooked = bookedSeat.includes(seatName);
@@ -129,7 +134,7 @@ function ExpandSeat({
       };
     } else if (isUserBooked || isBooked) {
       buttonStyle = {
-        backgroundColor: "lightcoral", 
+        backgroundColor: "lightcoral",
         color: "white",
       };
     }
@@ -153,8 +158,10 @@ function ExpandSeat({
   return (
     <section className="seat-select">
       <div className="left-seat-info">
-        <div className="wheel">
-          <img src={steering} alt="Steering Wheel" />
+        <div className="outer-wheel">
+          <div className="wheel">
+            <img src={steering} alt="Steering Wheel" />
+          </div>
         </div>
         <div className="single-seat">{["A1", "C1"].map(renderSeatButton)}</div>
         <div className="single-seat">
@@ -166,6 +173,13 @@ function ExpandSeat({
         <div className="single-seat">
           {["A4", "B3", "C4"].map(renderSeatButton)}
         </div>
+        {Number(item.availableSeats) === 14 ? (
+          <div className="single-seat">
+            {["A5", "B4", "C5"].map((seat) => renderSeatButton(seat))}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="right-pricing">
         <table>

@@ -5,7 +5,11 @@ const adminController = require("../controllers/admincontroller.js");
 router
   .route("/setTravel")
   .post(adminController.dateFixer)
-  .get(adminController.getTravel);
+  .get(adminController.getAllTravel)
+  ;
+
+  router.route('/getTravelData').post(adminController.getTravel);
+  
 
 router.route("/removeTravel").post(adminController.deleteTravel).get(adminController.getCompleteTravel);
 router
@@ -22,5 +26,7 @@ router.route("/getDashData").get(adminController.getAllData);
 router.route("/getUserSeat").post(adminController.getUserSeat);
 
 router.route("/getBookData").post(adminController.sendBookData);
+
+router.route("/checkExpire").post(adminController.checkExpireRide);
 
 module.exports = router;
