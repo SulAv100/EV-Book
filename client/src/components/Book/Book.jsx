@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/authContext";
 
 const TripCard = ({
   imgSrc,
+  fetchData,
   handleSeat,
   isExpanded,
   item,
@@ -17,74 +18,79 @@ const TripCard = ({
   showCloseButton,
   onCloseClick,
 }) => {
+  useEffect(() => {
+    console.log(fetchData);
+  }, [fetchData]);
   return (
-    <section className="outer-box">
-      <div className="outer-container">
-        <figure>
-          <img src={imgSrc} alt="van" />
-        </figure>
-        <div className="left-book">
-          <div className="destination">
-            <div className="start-point">
-              <span>{item.departTime}</span>
-              <span>{item.startLocation}</span>
+    <>
+      <section className="outer-box">
+        <div className="outer-container">
+          <figure>
+            <img src={imgSrc} alt="van" />
+          </figure>
+          <div className="left-book">
+            <div className="destination">
+              <div className="start-point">
+                <span>{item.departTime}</span>
+                <span>{item.startLocation}</span>
+              </div>
+              <div className="time-lapse">
+                <span>{item.duration}</span>
+                <span>-----------------------------------------------</span>
+              </div>
+              <div className="start-point">
+                <span>{item.droppingTime}</span>
+                <span>{item.destination}</span>
+              </div>
             </div>
-            <div className="time-lapse">
-              <span>{item.duration}</span>
-              <span>-----------------------------------------------</span>
-            </div>
-            <div className="start-point">
-              <span>{item.droppingTime}</span>
-              <span>{item.destination}</span>
+            <div className="time-facility">
+              <div className="departure">
+                <span>Date:</span>
+                <p>{item.date}</p>
+              </div>
+              <div className="vehicle">
+                <span>Vehicle:</span>
+                <p>{item.vehicleNo}</p>
+              </div>
+              <div className="departure">
+                <span>Total Seats:</span>
+                <p className="seats">{item.availableSeats}</p>
+              </div>
             </div>
           </div>
-          <div className="time-facility">
-            <div className="departure">
-              <span>Date:</span>
-              <p>{item.date}</p>
-            </div>
-            <div className="vehicle">
-              <span>Vehicle:</span>
-              <p>{item.vehicleNo}</p>
-            </div>
-            <div className="departure">
-              <span>Total Seats:</span>
-              <p className="seats">{item.availableSeats}</p>
+          <div className="right-book">
+            <div className="middle-box">
+              <span>Per seat fare</span>
+              <span className="fare">
+                <p>NPR</p>
+                <p>{item.price}</p>
+              </span>
+              {showCloseButton ? (
+                <button onClick={onCloseClick}>Close</button>
+              ) : (
+                <button onClick={() => handleSeat(item.date, item.vehicleNo)}>
+                  Book Seats
+                </button>
+              )}
             </div>
           </div>
         </div>
-        <div className="right-book">
-          <div className="middle-box">
-            <span>Per seat fare</span>
-            <span className="fare">
-              <p>NPR</p>
-              <p>{item.price}</p>
-            </span>
-            {showCloseButton ? (
-              <button onClick={onCloseClick}>Close</button>
-            ) : (
-              <button onClick={() => handleSeat(item.date, item.vehicleNo)}>
-                Book Seats
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-      {isExpanded && (
-        <ExpandSeat
-          item={item}
-          userBookedSeats={userBookedSeats}
-          userBookingId={userBookingId}
-          otherBookedSeats={otherBookedSeats}
-          confirmedSeats={confirmedSeats}
-          setUserBookedSeats={setUserBookedSeats}
-        />
-      )}
-    </section>
+        {isExpanded && (
+          <ExpandSeat
+            item={item}
+            userBookedSeats={userBookedSeats}
+            userBookingId={userBookingId}
+            otherBookedSeats={otherBookedSeats}
+            confirmedSeats={confirmedSeats}
+            setUserBookedSeats={setUserBookedSeats}
+          />
+        )}
+      </section>
+    </>
   );
 };
 
-function Book({ formData }) {
+function Book({ formData, displayError }) {
   const [expandedSeats, setExpandedSeats] = useState([]);
   const [userBookedSeats, setUserBookedSeats] = useState({});
   const [otherBookedSeats, setOtherBookedSeats] = useState([]);
@@ -192,20 +198,43 @@ function Book({ formData }) {
 
   return (
     <>
-      {fetchData?.map((item, index) => (
-        <TripCard
-          key={index}
-          imgSrc={Van}
-          handleSeat={(date, vehicleNo) => handleSeat(index, date, vehicleNo)}
-          isExpanded={expandedSeats[index]}
-          item={item}
-          userBookedSeats={userBookedSeats[index]?.seats || []}
-          userBookingId={userBookedSeats[index]?.bookingIds[0] || null}
-          otherBookedSeats={otherBookedSeats}
-          confirmedSeats={confirmedSeats}
-          setUserBookedSeats={setUserBookedSeats}
-        />
-      ))}
+      {fetchData?.length > 0 ? (
+        <>
+          {fetchData?.map((item, index) => (
+            <TripCard
+              key={index}
+              imgSrc={Van}
+              handleSeat={(date, vehicleNo) =>
+                handleSeat(index, date, vehicleNo)
+              }
+              isExpanded={expandedSeats[index]}
+              item={item}
+              fetchData={fetchData}
+              userBookedSeats={userBookedSeats[index]?.seats || []}
+              userBookingId={userBookedSeats[index]?.bookingIds[0] || null}
+              otherBookedSeats={otherBookedSeats}
+              confirmedSeats={confirmedSeats}
+              setUserBookedSeats={setUserBookedSeats}
+            />
+          ))}
+        </>
+      ) : (
+        <>
+          {displayError ? (
+            <h1
+              style={{
+                color: "red",
+              }}
+            >
+              No Rides Found For This Route
+            </h1>
+          ) : (
+            <>
+              <h2>Search Rides That You Want</h2>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }

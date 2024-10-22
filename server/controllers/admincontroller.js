@@ -389,16 +389,37 @@ const checkExpireRide = async (req, res) => {
     console.log("Today's date:", todayDate, "Current time:", currentTime);
 
     const availableRides = await dateModel.find({ date: todayDate });
+    console.log("Available rides for today:", availableRides);
+
     if (availableRides.length < 1) {
-      console.log("No rides available for today.");
-      return;
+      console.log("No ride for today");
+      return res.send("No rides available for today.");
     }
 
     for (const ride of availableRides) {
-      const { vehicleNo, startLocation, destination, date, departureTime } =
+      const { _id, vehicleNo, startLocation, destination, date, departTime } =
         ride;
 
-      if (currentTime > departureTime) {
+      const formattedDepartTime = departTime.replace(/([APM]{2})/, " $1");
+
+      if (
+        !formattedDepartTime ||
+        isNaN(new Date(`${date} ${formattedDepartTime}`))
+      ) {
+        console.error(
+          `Invalid departTime for ride ${vehicleNo}: ${formattedDepartTime}`
+        );
+        continue;
+      }
+
+      console.log("Uta ko time (currentTime):", currentTime);
+      console.log("Xutne time (departTime):", formattedDepartTime);
+
+      const currentDateTime = new Date(`${todayDate} ${currentTime}`);
+
+      const rideDateTime = new Date(`${date} ${formattedDepartTime}`);
+
+      if (currentDateTime > rideDateTime) {
         await completeModel.create({
           vehicleNo,
           date,
@@ -406,7 +427,11 @@ const checkExpireRide = async (req, res) => {
           destination,
         });
 
-        console.log(`Ride ${vehicleNo} moved to completeModel.`);
+        await dateModel.findByIdAndDelete(_id);
+
+        console.log(
+          `Ride ${vehicleNo} moved to completeModel and removed from dateModel.`
+        );
       } else {
         console.log(`Ride ${vehicleNo} has not expired yet.`);
       }

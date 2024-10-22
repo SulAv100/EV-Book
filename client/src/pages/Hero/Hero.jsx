@@ -10,6 +10,7 @@ function Hero() {
   const { getUserData, getAdminData, isAdmin, fetchTravel } = useAuth();
   const [todayDate, setTodayDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  const [displayError, setDisplayError]  = useState(false);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -102,6 +103,10 @@ function Hero() {
     }
   };
 
+  const handleToggle = ()=>{
+    setDisplayError(!displayError);
+  }
+
   return (
     <>
       <div className="hero-container">
@@ -126,12 +131,12 @@ function Hero() {
             value={formData.date}
             onChange={handleChange}
           />
-          <button type="submit">Search</button>
+          <button onClick={handleToggle} type="submit">Search</button>
         </form>
 
         <main className="interaction-part">
           <div className="book-overlay">
-            <Book formData={formData} />
+            <Book formData={formData} displayError={displayError} />
           </div>
         </main>
         <Contact />
