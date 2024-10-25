@@ -1,0 +1,56 @@
+.ticket-data{
+    position: relative;
+    padding: 30px 10px;
+    width: max-content;
+    border-radius: 20px;
+    box-shadow: 1px 2px 5px 2px rgb(0,0,0,0.5);
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.left-ticket{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.single-ticket{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    align-items: center;
+}
+.single-ticket label{
+    font-size: 17px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.single-ticket input{
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    width: 400px;
+    outline: none;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 20px;
+    color: rgb(95, 93, 93);
+    letter-spacing: 0.5px;
+}
+.right-section{
+    display: flex;
+    flex: 1;
+}
+.save-button-container{
+    display: flex;
+    border: 1px solid black;
+}
+.save-button{
+    border: 1px solid black;
+    float: right;
+    margin-right: 200px;
+    border: none;    
+    background-color: #0056b3;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 17px;
+}

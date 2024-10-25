@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./ProfilePage.css";
 import { useAuth } from "../../hooks/authContext";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  // State for password change form
   const [passwords, setPasswords] = useState({
     password: "",
     newPassword: "",
@@ -11,17 +11,16 @@ const ProfilePage = () => {
   });
 
   const { getUserData, userDetail, userContact } = useAuth();
-  const [bookingHistory, setBookingHistory] = useState([]); // State for booking history
 
-  // Fetch user data on component mount
+  const navigate = useNavigate();
+  const [bookingHistory, setBookingHistory] = useState([]);
+
   useEffect(() => {
     getUserData();
   }, []);
 
-  // Get user phone number from context
-  const phoneNumber = userContact; // Use userContact instead
+  const phoneNumber = userContact;
 
-  // Fetch confirmed bookings based on user contact
   const getConfirmedBooks = async () => {
     try {
       const response = await fetch(
@@ -31,7 +30,7 @@ const ProfilePage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ phoneNumber }), // Send userNumber
+          body: JSON.stringify({ phoneNumber }),
         }
       );
 
@@ -40,22 +39,19 @@ const ProfilePage = () => {
         console.log("Network error occurred");
         return;
       }
-      console.log(data); // Log confirmed bookings data for debugging
-      setBookingHistory(data); // Update booking history with the fetched data
+      console.log(data);
+      setBookingHistory(data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // Fetch confirmed bookings when userContact changes
   useEffect(() => {
     if (phoneNumber) {
-      // Ensure userNumber is available before fetching
       getConfirmedBooks();
     }
   }, [phoneNumber]);
 
-  // Handle password change input
   const handlePasswordChange = (e) => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
   };
@@ -85,8 +81,17 @@ const ProfilePage = () => {
       } catch (error) {
         console.error(error);
       }
-    }else{
+    } else {
       alert("Incorrect password");
+      return;
+    }
+  };
+
+  const displayTicket = (ticketId) => {
+    if (ticketId) {
+      navigate(`/ticket/${ticketId}`);
+    } else {
+      console.log("Something went wrong");
       return;
     }
   };
@@ -99,7 +104,7 @@ const ProfilePage = () => {
 
       <div className="profile-info">
         <h2>Name: {userDetail.firstName}</h2>
-        <p>Phone Number: {userContact}</p> {/* Display userContact */}
+        <p>Phone Number: {userContact}</p>
       </div>
 
       <div className="booking-history">
@@ -116,7 +121,7 @@ const ProfilePage = () => {
           </thead>
           <tbody>
             {bookingHistory.map((booking, index) => (
-              <tr key={booking._id}>
+              <tr onClick={() => displayTicket(booking._id)} key={booking._id}>
                 <td>{index + 1}</td>
                 <td>{booking.date}</td>
                 <td>{`${booking.startLocation} to ${booking.destination}`}</td>

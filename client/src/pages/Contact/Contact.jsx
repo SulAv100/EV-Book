@@ -48,7 +48,7 @@ const Contact = () => {
                 Keep your ticket with you for the whole journey. If you lose it,
                 you will need to buy a new one. Be at the boarding point 30
                 minutes before departure. If you're late and miss the bus,
-                BusSewa.com cannot and will not be held responsible. Check your
+                DevghatDham.com cannot and will not be held responsible. Check your
                 ticket for the correct AM or PM time. No refunds will be
                 provided if you miss the bus because of such confusion.
                 Passengers must follow the terms and conditions of the bus
@@ -84,7 +84,7 @@ const Contact = () => {
 
             <div className={`hide-div ${isOpen === 3 ? "open" : ""}`}>
               <p>
-                BusSewa.com offers refunds for cancellations made up to 12 hours
+                DevGhat.com offers refunds for cancellations made up to 12 hours
                 before departure, unless the operator has a seperate
                 cancellation policy in place. Charges for cancellation will be
                 applied as follows:(If you purchase your Ticket on Baisakh 1
