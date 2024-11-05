@@ -30,4 +30,18 @@
   .delete-button:hover {
     background-color: #d32f2f;
   }
+
+  .view-button {
+    background-color: rgb(111, 111, 240);
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .view-button:hover {
+    background-color: #ab53f8;
+  }
+  
   

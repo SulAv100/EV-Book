@@ -1,0 +1,22 @@
+.booked-seat {
+  background-color: #ffcccc; 
+  color: #8b0000;
+  cursor: not-allowed;
+}
+
+.confirmed-seat {
+  background-color: #ccffcc; 
+  color: #006400;
+  cursor: not-allowed;
+}
+
+.selected-seat {
+    background-color: lightgreen; 
+  }
+  
+  
+  .book-seat-button{
+    background-color: rgb(134, 134, 246);
+    color: white;
+    padding: 10px 30px;
+  }

@@ -156,7 +156,7 @@ function Book({ formData, displayError }) {
         if (data.userBooked && Array.isArray(data.userBooked)) {
           data.userBooked.forEach((booking) => {
             userBookedData.push(...booking.seatData);
-            userBookingIds.push(booking._id); // Get booking ID
+            userBookingIds.push(booking._id); 
           });
         }
 

@@ -54,7 +54,7 @@ const getTravel = async (req, res) => {
       return res.status(404).json({ msg: "No tarvel data found for this" });
     }
 
-    console.log("Yo hai", collectData);
+    // console.log("Yo hai", collectData);
     return res.status(200).json(collectData);
   } catch (error) {
     console.error(error);
@@ -64,14 +64,14 @@ const getTravel = async (req, res) => {
 const getAllTravel = async (req, res) => {
   try {
     const collectData = await dateModel.find();
-    console.log("Data is ", collectData);
+    // console.log("Data is ", collectData);
 
     if (!collectData) {
       console.log("No data found");
       return res.status(404).json({ msg: "No tarvel data found for this" });
     }
 
-    console.log(collectData);
+    // console.log(collectData);
     return res.status(200).json(collectData);
   } catch (error) {
     console.error(error);
@@ -96,7 +96,7 @@ const seatBooker = async (req, res) => {
       bookingId, // Extract bookingId properly
     } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
 
     // Check if bookingId is valid
     if (bookingId && bookingId !== "N/A") {
@@ -147,7 +147,7 @@ const seatBooker = async (req, res) => {
         .json({ msg: "Successfully booked", bookingId: newEntry._id });
     } else {
       // If bookingId is not provided at all
-      console.log("Booking ID is not provided.");
+      // console.log("Booking ID is not provided.");
       return res.status(400).json({ msg: "Booking ID is required." });
     }
   } catch (error) {
@@ -328,7 +328,6 @@ const sendBookData = async (req, res) => {
     if (!userBooked || userBooked.length === 0) {
       userBooked = null;
     }
-    console.log("User le haneko book", userBooked);
 
     let findBooked = await bookModel.find({
       date,
@@ -340,7 +339,6 @@ const sendBookData = async (req, res) => {
       findBooked = null;
     }
 
-    console.log("User le nahaneko book", findBooked);
     let findConfirmed = await confirmModel.find({ date, vehicleNo });
 
     if (!findConfirmed || findConfirmed.length === 0) {
@@ -355,13 +353,11 @@ const sendBookData = async (req, res) => {
 const getUserSeat = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
-    console.log(phoneNumber);
 
     const confirmSeat = await confirmModel.find({ phoneNumber });
-    console.log(confirmSeat);
 
     if (!confirmSeat) {
-      console.log("No data found");
+      // console.log("No data found");
       return res.status(404).json({ msg: "No such data has been found" });
     }
 
@@ -386,13 +382,13 @@ const getCompleteTravel = async (req, res) => {
 const checkExpireRide = async (req, res) => {
   try {
     const { todayDate, currentTime } = req.body;
-    console.log("Today's date:", todayDate, "Current time:", currentTime);
+    // console.log("Today's date:", todayDate, "Current time:", currentTime);
 
-    const availableRides = await dateModel.find({ date: todayDate });
-    console.log("Available rides for today:", availableRides);
+    const availableRides = await dateModel.find({});
+    // console.log("Available rides for today:", availableRides);
 
     if (availableRides.length < 1) {
-      console.log("No ride for today");
+      // console.log("No ride for today");
       return res.send("No rides available for today.");
     }
 
@@ -412,8 +408,8 @@ const checkExpireRide = async (req, res) => {
         continue;
       }
 
-      console.log("Uta ko time (currentTime):", currentTime);
-      console.log("Xutne time (departTime):", formattedDepartTime);
+      // console.log("Uta ko time (currentTime):", currentTime);
+      // console.log("Xutne time (departTime):", formattedDepartTime);
 
       const currentDateTime = new Date(`${todayDate} ${currentTime}`);
 
@@ -429,9 +425,9 @@ const checkExpireRide = async (req, res) => {
 
         await dateModel.findByIdAndDelete(_id);
 
-        console.log(
-          `Ride ${vehicleNo} moved to completeModel and removed from dateModel.`
-        );
+        // console.log(
+        //   `Ride ${vehicleNo} moved to completeModel and removed from dateModel.`
+        // );
       } else {
         console.log(`Ride ${vehicleNo} has not expired yet.`);
       }
@@ -444,8 +440,68 @@ const checkExpireRide = async (req, res) => {
   }
 };
 
+const getTicket = async (req, res) => {
+  try {
+    const { ticketId } = req.body;
+    let statusType;
+    // console.log("This is ticket", ticketId);
+
+    const todayData = new Date();
+    let newDate = new Date(todayData).toISOString().split("T")[0];
+    // console.log(newDate);
+    const ticketData = await confirmModel.findById(ticketId);
+    if (!ticketData) {
+      return res.status(404).json({ msg: "This ticket data no longer exists" });
+    }
+    if (newDate > ticketData.date) {
+      statusType = "Expired";
+    } else {
+      statusType = "Valid";
+    }
+    // console.log(ticketData.date);
+    return res
+      .status(202)
+      .json({ ticketData: ticketData, Expired: statusType });
+  } catch (error) {
+    // console.log("An error has occured");
+    return res.status(500).json({ msg: "Internal Server Error" });
+  }
+};
+
+const getBusDetails = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { vehicleNo, date } = req.body;
+    const viableRides = await dateModel.find({
+      vehicleNo: vehicleNo,
+      date: date,
+    });
+
+    const bookedSeat = await bookModel.find({
+      vehicleNo: vehicleNo,
+      date: date,
+    });
+
+    const confirmedSeat = await confirmModel.find({
+      vehicleNo: vehicleNo,
+      date: date,
+    });
+
+    if (!bookedSeat && !confirmedSeat) {
+      res.status(209).json({ msg: "No seats booked till now" });
+      return;
+    }
+    return res.status(202).json({ bookedSeat, confirmedSeat });
+
+    // console.log("Bheteko rides haru yo ho hai", viableRides);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   dateFixer,
+  getTicket,
   getTravel,
   seatBooker,
   deleteTravel,
@@ -459,4 +515,5 @@ module.exports = {
   getCompleteTravel,
   getAllTravel,
   checkExpireRide,
+  getBusDetails,
 };

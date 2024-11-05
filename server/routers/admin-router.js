@@ -29,4 +29,7 @@ router.route("/getBookData").post(adminController.sendBookData);
 
 router.route("/checkExpire").post(adminController.checkExpireRide);
 
+router.route('/getTicket').post(adminController.getTicket)
+router.route('/getBusData').post(adminController.getBusDetails)
+
 module.exports = router;

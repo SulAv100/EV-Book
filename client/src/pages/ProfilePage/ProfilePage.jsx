@@ -120,15 +120,21 @@ const ProfilePage = () => {
             </tr>
           </thead>
           <tbody>
-            {bookingHistory.map((booking, index) => (
-              <tr onClick={() => displayTicket(booking._id)} key={booking._id}>
-                <td>{index + 1}</td>
-                <td>{booking.date}</td>
-                <td>{`${booking.startLocation} to ${booking.destination}`}</td>
-                <td>{booking.seatData.join(", ")}</td>
-                <td>{booking.vehicleNo}</td>
-              </tr>
-            ))}
+            {bookingHistory
+              .slice()
+              .reverse()
+              .map((booking, index) => (
+                <tr
+                  onClick={() => displayTicket(booking._id)}
+                  key={booking._id}
+                >
+                  <td>{index + 1}</td>
+                  <td>{booking.date}</td>
+                  <td>{`${booking.startLocation} to ${booking.destination}`}</td>
+                  <td>{booking.seatData.join(", ")}</td>
+                  <td>{booking.vehicleNo}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
