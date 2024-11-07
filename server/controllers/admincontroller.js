@@ -223,6 +223,7 @@ const bookData = async (req, res) => {
 
 const confirmBook = async (req, res) => {
   try {
+    console.log(req.body);
     const { bookingData } = req.body;
     const {
       _id: bookingId,
@@ -499,6 +500,38 @@ const getBusDetails = async (req, res) => {
   }
 };
 
+const bookSeatForPeople = async (req, res) => {
+  try {
+    const { bookingData } = req.body;
+    const {
+      _id: bookingId,
+      phoneNumber,
+      date,
+      vehicleNo,
+      seatData,
+      startLocation,
+      destination,
+    } = bookingData;
+    console.log("YO ho hai booking ata", bookingData);
+
+    const newModelData = new confirmModel({
+      bookingId,
+      vehicleNo,
+      seatData,
+      phoneNumber,
+      startLocation,
+      destination,
+      date,
+    });
+
+    await newModelData.save();
+
+    console.log("DOne");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   dateFixer,
   getTicket,
@@ -516,4 +549,5 @@ module.exports = {
   getAllTravel,
   checkExpireRide,
   getBusDetails,
+  bookSeatForPeople,
 };

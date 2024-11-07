@@ -31,5 +31,6 @@ router.route("/checkExpire").post(adminController.checkExpireRide);
 
 router.route('/getTicket').post(adminController.getTicket)
 router.route('/getBusData').post(adminController.getBusDetails)
+router.route("/adminBookSeat").post(adminController.bookSeatForPeople);
 
 module.exports = router;
